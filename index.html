@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Змейка-хамелеон</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="game-board"></div>
+        <div id="stats">
+            <div>Длина: <span id="length">1</span></div>
+            <div>HP: <span id="hp">5</span></div>
+            <div>Цвет: <span id="color">🟢</span></div>
+        </div>
+    </div>
+    <div id="game-over-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Игра окончена!</h2>
+            <p id="final-score">Длина: 0</p>
+            <div class="color-preview" id="final-color"></div>
+            <button id="restart-button">Новая игра</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
