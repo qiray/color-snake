@@ -17,7 +17,7 @@ const translations = {
         restart_button: "Играть снова",
         score_label: "Очки:",
         combo_label: "Комбо:",
-		combo_message: "КОМБО"
+        combo_message: "КОМБО"
     },
     en: {
         title: "Chameleon snake",
@@ -36,7 +36,7 @@ const translations = {
         restart_button: "Play again",
         score_label: "Score:",
         combo_label: "Combo:",
-		combo_message: "COMBO"
+        combo_message: "COMBO"
     }
 };
 
@@ -55,20 +55,33 @@ function applyTranslations(lang) {
             element.textContent = translations[lang][key];
         }
     });
+
+    // Обновляем активную кнопку языка
+    document.querySelectorAll('#language-switcher .language-btn').forEach(btn => {
+        if (btn.dataset.lang === lang) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    // Сохраняем выбор языка
+    localStorage.setItem('userLanguage', lang);
 }
 
 function getTranslation(key) {
-	return translations[currentLang][key] || key;
+    return translations[currentLang][key] || key;
 }
 
-// // Обработчик смены языка //TODO:
-// document.getElementById('languageSelector').addEventListener('change', (e) => {
-//     currentLang = e.target.value;
-//     localStorage.setItem('userLanguage', currentLang);
-//     applyTranslations(currentLang);
-// });
+// Обработчики кнопок переключения языка
+document.querySelectorAll('#language-switcher .language-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const lang = btn.dataset.lang;
+        if (lang !== currentLang) {
+            currentLang = lang;
+            applyTranslations(lang);
+        }
+    });
+});
 
-// Инициализация
-// document.getElementById('languageSelector').value = currentLang;
-
-applyTranslations(currentLang);
+applyTranslations(currentLang); // Инициализация

@@ -156,3 +156,40 @@ button:hover {
     padding: 2px 8px;
     margin: 0 3px;
 }
+
+#language-switcher {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 20;
+    display: flex;
+    gap: 5px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    padding: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.language-btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.language-btn:hover {
+    background: rgba(0, 255, 255, 0.2);
+}
+
+.language-btn.active {
+    background: #0ff;
+    color: #1a1a2e;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+}
