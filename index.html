@@ -1,27 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Змейка-хамелеон в лабиринте</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Змейка-хамелеон</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div id="game-container">
-        <h1>Змейка-хамелеон</h1>
-        <div id="stats">
-            <div>Уровень: <span id="level">1</span></div>
-            <div>Длина: <span id="length">1</span></div>
-            <div>Очки: <span id="score">0</span></div>
-            <div>Фруктов: <span id="fruits-left">0</span></div>
+        <div id="game-header">
+            <div id="score-container">Очки: <span id="score">0</span></div>
+            <div id="combo-container">Комбо: <span id="combo">0</span></div>
         </div>
-        <div id="game-board"></div>
-        <div id="game-over-modal" class="modal hidden">
-            <div class="modal-content">
-                <h2>Игра окончена!</h2>
-                <p>Ваш результат: <span id="final-score">0</span> очков</p>
-                <button id="restart-button">Новая игра</button>
+        <canvas id="gameCanvas" width="600" height="600"></canvas>
+        
+        <div id="game-overlay">
+            <div id="start-screen">
+                <h1>Змейка-хамелеон</h1>
+                <h2>Съедай фрукты своего цвета!</h2>
+                <p>Собери комбо из фруктов одного цвета, чтобы получить больше очков!</p>
+                <button id="start-button">Начать игру</button>
+                
+                <div id="instructions">
+                    <h3>Как играть:</h3>
+                    <ul>
+                        <li>Управляй змейкой с помощью клавиш <span class="key">↑</span> <span class="key">←</span> <span class="key">↓</span> <span class="key">→</span></li>
+                        <li>Съедай фрукты, чтобы расти и получать очки</li>
+                        <li>При съедании фрукта змейка меняет цвет на цвет фрукта</li>
+                        <li>Съедай несколько фруктов одного цвета подряд для комбо</li>
+                        <li>Избегай столкновений с собой!</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="game-over" class="hidden">
+                <h1>Конец игры!</h1>
+                <h2>Ваш счёт: <span id="final-score">0</span></h2>
+                <p>Самое длинное комбо: <span id="max-combo">0</span></p>
+                <button id="restart-button">Играть снова</button>
             </div>
         </div>
     </div>
-    <script src="game.js"></script>
+
+    <script src="js/main.js"></script>
 </body>
 </html>
