@@ -2,45 +2,48 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Змейка-хамелеон</title>
+    <title data-i18n="title">Chameleon snake</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div id="game-container">
         <div id="game-header">
-            <div id="score-container">Очки: <span id="score">0</span></div>
-            <div id="combo-container">Комбо: <span id="combo">0</span></div>
+            <div id="score-container"><span data-i18n="score_label"></span><span id="score">0</span></div>
+            <div id="combo-container"><span data-i18n="combo_label"></span><span id="combo">0</span></div>
         </div>
         <canvas id="gameCanvas" width="600" height="600"></canvas>
         
         <div id="game-overlay">
             <div id="start-screen">
-                <h1>Змейка-хамелеон</h1>
-                <h2>Съедай фрукты своего цвета!</h2>
-                <p>Собери комбо из фруктов одного цвета, чтобы получить больше очков!</p>
-                <button id="start-button">Начать игру</button>
+                <h1 data-i18n="title"></h1>
+                <h2 data-i18n="subtitle"></h2>
+                <p data-i18n="game_description"></p>
+                <button id="start-button" data-i18n="start_button"></button>
                 
                 <div id="instructions">
-                    <h3>Как играть:</h3>
+                    <h3 data-i18n="how_to_play"></h3>
                     <ul>
-                        <li>Управляй змейкой с помощью клавиш <span class="key">↑</span> <span class="key">←</span> <span class="key">↓</span> <span class="key">→</span></li>
-                        <li>Съедай фрукты, чтобы расти и получать очки</li>
-                        <li>При съедании фрукта змейка меняет цвет на цвет фрукта</li>
-                        <li>Съедай несколько фруктов одного цвета подряд для комбо</li>
-                        <li>Избегай столкновений с собой!</li>
+                        <li data-i18n="control_instruction"></li>
+                        <li data-i18n="eat_instruction"></li>
+                        <li><span data-i18n="color_change_instruction"></span>
+                            <span class="key">↑</span> <span class="key">←</span> <span class="key">↓</span> <span class="key">→</span>
+                        </li>
+                        <li data-i18n="combo_instruction"></li>
+                        <li data-i18n="avoid_instruction"></li>
                     </ul>
                 </div>
             </div>
             
             <div id="game-over" class="hidden">
-                <h1>Конец игры!</h1>
-                <h2>Ваш счёт: <span id="final-score">0</span></h2>
-                <p>Самое длинное комбо: <span id="max-combo">0</span></p>
-                <button id="restart-button">Играть снова</button>
+                <h1 data-i18n="game_over"></h1>
+                <h2 data-i18n="final_score"><span id="final-score">0</span></h2>
+                <p data-i18n="max_combo"><span id="max-combo">0</span></p>
+                <button id="restart-button" data-i18n="restart_button"></button>
             </div>
         </div>
     </div>
 
+    <script src="js/translations.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

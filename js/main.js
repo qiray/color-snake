@@ -319,7 +319,7 @@ function drawGrid() {
 function showComboMessage(x, y, bonus) {
 	const message = document.createElement('div');
 	message.className = 'combo-message';
-	message.textContent = `+${bonus} КОМБО x${combo}!`;
+	message.textContent = `+${bonus} ${getTranslation("combo_message")} x${combo}!`;
 	message.style.left = `${x}px`;
 	message.style.top = `${y}px`;
 	
