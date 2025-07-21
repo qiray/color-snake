@@ -15,6 +15,7 @@ const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 const comboElement = document.getElementById('combo');
 const startScreen = document.getElementById('start-screen');
+const gameOverlay = document.getElementById('game-overlay');
 const gameOverScreen = document.getElementById('game-over');
 const finalScoreElement = document.getElementById('final-score');
 const maxComboElement = document.getElementById('max-combo');
@@ -347,6 +348,7 @@ function endGame() {
     maxComboElement.textContent = maxCombo;
     
     gameOverScreen.classList.remove('hidden');
+    gameOverlay.classList.remove('hidden');
     startScreen.classList.add('hidden');
 }
 
@@ -373,11 +375,13 @@ document.addEventListener('keydown', (e) => {
 // Кнопки управления
 document.getElementById('start-button').addEventListener('click', () => {
     startScreen.classList.add('hidden');
+    gameOverlay.classList.add('hidden');
     initGame();
 });
 
 document.getElementById('restart-button').addEventListener('click', () => {
     gameOverScreen.classList.add('hidden');
+    gameOverlay.classList.add('hidden');
     initGame();
 });
 

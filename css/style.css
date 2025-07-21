@@ -48,8 +48,8 @@ canvas {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: calc(100% + 4px);
+    height: calc(100% - 2px);
     background: rgba(0, 0, 0, 0.85);
     display: flex;
     flex-direction: column;
@@ -123,7 +123,7 @@ button:hover {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 #instructions {
@@ -182,6 +182,7 @@ button:hover {
     font-weight: bold;
     transition: all 0.3s ease;
     text-transform: uppercase;
+    margin-top: 0;
 }
 
 .language-btn:hover {
