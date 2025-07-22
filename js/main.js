@@ -24,6 +24,7 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 const comboElement = document.getElementById('combo');
+const comboLabel = document.getElementById('combo-label');
 const startScreen = document.getElementById('start-screen');
 const gameOverlay = document.getElementById('game-overlay');
 const gameOverScreen = document.getElementById('game-over');
@@ -78,6 +79,8 @@ function initGame() {
     if (gameInterval) clearInterval(gameInterval);
     gameInterval = setInterval(gameLoop, gameSpeed);
     gameActive = true;
+
+    updateComboElementStyle("#ffcc00", '0 0 8px rgba(255, 204, 0, 0.8)');
 }
 
 // Генерация еды
@@ -205,6 +208,7 @@ function handleFoodEaten(food) {
     
     // Обновляем текущий цвет
     currentColor = food.color;
+    updateComboElementStyle(currentColor, `0 0 10px ${currentColor}`);
     updateScore();
 }
 
@@ -366,9 +370,11 @@ function endGame() {
     gameOverScreen.classList.remove('hidden');
     gameOverlay.classList.remove('hidden');
     startScreen.classList.add('hidden');
+
+    updateComboElementStyle("#ffcc00", '0 0 8px rgba(255, 204, 0, 0.8)');
 }
 
 function updateComboElementStyle(color, shadow) {
-    comboElement.style.color = color;
-    comboElement.style.textShadow = shadow;
+    comboElement.style.color = comboLabel.style.color = color;
+    comboElement.style.textShadow = comboLabel.style.textShadow = shadow;
 }

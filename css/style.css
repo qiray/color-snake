@@ -43,8 +43,10 @@ body {
 }
 
 #combo-container {
-    color: #ffcc00;
-    text-shadow: 0 0 8px rgba(255, 204, 0, 0.8);
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease; /* Плавное изменение */
 }
 
 canvas {
