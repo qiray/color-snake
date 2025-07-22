@@ -1,4 +1,14 @@
 
+/**
+ * Chameleon Snake Game - Styles
+ * 
+ * Created: 2025
+ * Author: Yaroslav Zotov
+ * AI-Assisted: Color scheme and layout suggestions
+ * 
+ * MIT Licensed
+ */
+
 body {
     display: flex;
     justify-content: center;
@@ -110,16 +120,22 @@ button:hover {
     position: absolute;
     font-size: 28px;
     font-weight: bold;
-    color: #ffcc00;
-    text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
     z-index: 5;
     pointer-events: none;
-    animation: floatUp 1.5s forwards;
+    animation: floatUp 1.5s forwards, pulse 0.5s infinite alternate;
+    text-align: center;
+    font-family: 'Arial Black', sans-serif;
+    white-space: nowrap;
+}
+
+@keyframes pulse {
+    from { transform: translateY(-10px) scale(1); }
+    to { transform: translateY(-10px) scale(1.1); }
 }
 
 @keyframes floatUp {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-100px); opacity: 0; }
+    0% { transform: translateY(-10px) scale(1); opacity: 1; }
+    100% { transform: translateY(-100px) scale(1.3); opacity: 0; }
 }
 
 .hidden {

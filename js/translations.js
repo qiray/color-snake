@@ -1,7 +1,18 @@
 
+
+/**
+ * Chameleon Snake Game - Translations Logic
+ * 
+ * Created: 2025
+ * Author: Yaroslav Zotov
+ * AI-Assisted Development: Code generation
+ * 
+ * MIT Licensed
+ */
+
 const translations = {
     ru: {
-        title: "Змейка-хамелеон",
+        title: "Хамелеон-змейка",
         subtitle: "Съедай фрукты своего цвета!",
         game_description: "Собери комбо из фруктов одного цвета, чтобы получить больше очков!",
         start_button: "Начать игру",

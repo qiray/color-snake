@@ -1,12 +1,22 @@
 
+
+/**
+ * Chameleon Snake Game - Core Logic
+ * 
+ * Created: 2025
+ * Author: Yaroslav Zotov
+ * AI-Assisted Development: Code generation
+ * 
+ * MIT Licensed
+ */
+
 // Конфигурация игры
 const config = {
     gridSize: 20,
     initialSnakeLength: 4,
     foodCount: 7,
     baseSpeed: 140,
-    speedIncrease: 3,
-    comboTime: 2000
+    speedIncrease: 3
 };
 
 // Игровые переменные
@@ -29,7 +39,6 @@ let combo = 0;
 let maxCombo = 0;
 let currentColor = '#00FF7F';
 let gameInterval;
-let comboTimeout;
 let gameActive = false;
 let gameSpeed = config.baseSpeed;
 
@@ -62,7 +71,8 @@ function initGame() {
     updateScore();
     
     // Создаем еду
-    generateFood();
+    foods = [];
+    addNewFood(config.foodCount);
     
     // Начинаем игровой цикл
     if (gameInterval) clearInterval(gameInterval);
@@ -71,12 +81,11 @@ function initGame() {
 }
 
 // Генерация еды
-function generateFood() {
-    foods = [];
-    
-    for (let i = 0; i < config.foodCount; i++) {
+function addNewFood(count) {
+    for (let i = 0; i < count; i++) {
         let newFood;
         let overlapping;
+        let attempts = 0;
         
         do {
             overlapping = false;
@@ -86,7 +95,7 @@ function generateFood() {
                 color: colors[Math.floor(Math.random() * colors.length)]
             };
             
-            // Проверка наложения на змейку
+            // Проверка на змейку
             for (const segment of snake) {
                 if (segment.x === newFood.x && segment.y === newFood.y) {
                     overlapping = true;
@@ -94,16 +103,27 @@ function generateFood() {
                 }
             }
             
-            // Проверка наложения на другую еду
-            for (const food of foods) {
-                if (food.x === newFood.x && food.y === newFood.y) {
-                    overlapping = true;
-                    break;
+            // Проверка на другие фрукты
+            if (!overlapping) {
+                for (const food of foods) {
+                    if (food.x === newFood.x && food.y === newFood.y) {
+                        overlapping = true;
+                        break;
+                    }
                 }
+            }
+            
+            // Защита от бесконечного цикла
+            attempts++;
+            if (attempts > 100) {
+                console.log("Не удалось разместить новый фрукт");
+                break;
             }
         } while (overlapping);
         
-        foods.push(newFood);
+        if (!overlapping) {
+            foods.push(newFood);
+        }
     }
 }
 
@@ -145,7 +165,8 @@ function moveSnake() {
             // Обработка съедения еды
             handleFoodEaten(foods[i]);
             foods.splice(i, 1);
-            generateFood();
+            const newFoodCount = 1 + Math.floor(Math.random() * 2); // Добавляем 1 или 2 новых фрукта
+            addNewFood(newFoodCount);
             foodEaten = true;
             break;
         }
@@ -169,7 +190,7 @@ function handleFoodEaten(food) {
         score += 10 + comboBonus;
         
         // Показ сообщения о комбо
-        showComboMessage(food.x * config.gridSize, food.y * config.gridSize, comboBonus);
+        showComboMessage(food.x * config.gridSize, food.y * config.gridSize, comboBonus, food.color);
         
         // Увеличиваем скорость
         if (gameSpeed > 70) {
@@ -185,13 +206,6 @@ function handleFoodEaten(food) {
     // Обновляем текущий цвет
     currentColor = food.color;
     updateScore();
-    
-    // Сброс комбо через время
-    clearTimeout(comboTimeout);
-    comboTimeout = setTimeout(() => {
-        combo = 0;
-        updateScore();
-    }, config.comboTime);
 }
 
 // Проверка столкновений
@@ -317,16 +331,19 @@ function drawGrid() {
 }
 
 // Показать сообщение о комбо
-function showComboMessage(x, y, bonus) {
+function showComboMessage(x, y, bonus, color) {
     const message = document.createElement('div');
     message.className = 'combo-message';
-    message.textContent = `+${bonus} ${getTranslation("combo_message")} x${combo}!`;
+    message.textContent = `+${bonus} КОМБО x${combo}!`;
     message.style.left = `${x}px`;
     message.style.top = `${y}px`;
     
+    // Устанавливаем цвет из параметра
+    message.style.color = color;
+    message.style.textShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
+    
     document.getElementById('game-container').appendChild(message);
     
-    // Удаление сообщения после анимации
     setTimeout(() => {
         message.remove();
     }, 1500);
@@ -341,7 +358,6 @@ function updateScore() {
 // Конец игры
 function endGame() {
     clearInterval(gameInterval);
-    clearTimeout(comboTimeout);
     gameActive = false;
     
     finalScoreElement.textContent = score;
@@ -352,38 +368,7 @@ function endGame() {
     startScreen.classList.add('hidden');
 }
 
-// Обработка нажатий клавиш
-document.addEventListener('keydown', (e) => {
-    if (!gameActive) return;
-    
-    switch (e.key) {
-        case 'ArrowUp':
-            if (direction !== 'down') nextDirection = 'up';
-            break;
-        case 'ArrowDown':
-            if (direction !== 'up') nextDirection = 'down';
-            break;
-        case 'ArrowLeft':
-            if (direction !== 'right') nextDirection = 'left';
-            break;
-        case 'ArrowRight':
-            if (direction !== 'left') nextDirection = 'right';
-            break;
-    }
-});
-
-// Кнопки управления
-document.getElementById('start-button').addEventListener('click', () => {
-    startScreen.classList.add('hidden');
-    gameOverlay.classList.add('hidden');
-    initGame();
-});
-
-document.getElementById('restart-button').addEventListener('click', () => {
-    gameOverScreen.classList.add('hidden');
-    gameOverlay.classList.add('hidden');
-    initGame();
-});
-
-// Первоначальная генерация еды
-generateFood();
+function updateComboElementStyle(color, shadow) {
+    comboElement.style.color = color;
+    comboElement.style.textShadow = shadow;
+}
