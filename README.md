@@ -8,7 +8,8 @@
 <!-- TODO: Какое-то усложнение (бомбы или таймеры?) -->
 <!-- TODO: Пауза -->
 <!-- TODO: Save and show max score -->
-<!-- TODO: screenshot -->
+<!-- TODO: gameplay screenshot -->
+<!-- TODO: ESLint -->
 <!-- TODO: Мобильная версия -->
 
 <!-- TODO:  -->
