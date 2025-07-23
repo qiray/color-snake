@@ -12,7 +12,7 @@
 
 // Конфигурация игры
 const config = {
-    gridSize: 20,
+    gridSize: 30,
     initialSnakeLength: 4,
     foodCount: 7,
     baseSpeed: 140,
@@ -338,7 +338,7 @@ function drawGrid() {
 function showComboMessage(x, y, bonus, color) {
     const message = document.createElement('div');
     message.className = 'combo-message';
-    message.textContent = `+${bonus} КОМБО x${combo}!`;
+    message.textContent = `+${bonus} ${getTranslation("combo_message")} x${combo}!`;
     message.style.left = `${x}px`;
     message.style.top = `${y}px`;
     

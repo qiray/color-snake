@@ -131,9 +131,14 @@ button:hover {
 }
 
 @keyframes pulse {
+    from { text-shadow: 0 0 10px rgba(0, 255, 255, 0.8); }
+    to { text-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 50px rgba(0, 200, 255, 0.8); }
+}
+
+/* @keyframes pulse {
     from { transform: translateY(-10px) scale(1); }
     to { transform: translateY(-10px) scale(1.1); }
-}
+} */
 
 @keyframes floatUp {
     0% { transform: translateY(-10px) scale(1); opacity: 1; }
@@ -145,10 +150,18 @@ button:hover {
 }
 
 #instructions {
-    background: rgba(0, 30, 60, 0.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% + 4px);
+    height: calc(100% - 2px);
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border-radius: 10px;
-    padding: 20px;
-    margin-top: 20px;
+    z-index: 10;
     border: 1px solid #0ff;
 }
 
@@ -211,4 +224,8 @@ button:hover {
     background: #0ff;
     color: #1a1a2e;
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+}
+
+.menu-button {
+    width: 60%
 }

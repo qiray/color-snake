@@ -41,3 +41,15 @@ document.getElementById('restart-button').addEventListener('click', () => {
     gameOverlay.classList.add('hidden');
     initGame();
 });
+
+document.getElementById('how-to-play-button').addEventListener('click', () => {
+    document.getElementById('instructions').classList.remove('hidden');
+});
+
+document.getElementById('instructions-ok-button').addEventListener('click', () => {
+    document.getElementById('instructions').classList.add('hidden');
+});
+
+document.getElementById('about-button').addEventListener('click', () => {
+    // TODO:
+});
