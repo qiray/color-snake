@@ -28,16 +28,19 @@ body {
 }
 
 #game-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 20px;
     background: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
     margin-bottom: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-#score-container, #combo-container {
+.header-row {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#score-container, #combo-container, #best-score-container, #best-combo-container {
     font-size: 24px;
     font-weight: bold;
 }
@@ -71,7 +74,7 @@ canvas {
     z-index: 10;
 }
 
-#start-screen, #game-over {
+#start-screen, #game-over, #popup {
     text-align: center;
     padding: 30px;
     max-width: 80%;
@@ -102,7 +105,7 @@ button {
     border: none;
     border-radius: 50px;
     color: #1a1a2e;
-    padding: 15px 40px;
+    padding: 15px 20px;
     font-size: 22px;
     font-weight: bold;
     cursor: pointer;
@@ -227,5 +230,5 @@ button:hover {
 }
 
 .menu-button {
-    width: 60%
+    width: 70%
 }

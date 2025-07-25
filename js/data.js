@@ -23,12 +23,17 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 const comboElement = document.getElementById('combo');
+const bestScoreElement = document.getElementById('best-score');
+const bestComboElement = document.getElementById('best-combo');
 const comboLabel = document.getElementById('combo-label');
 const startScreen = document.getElementById('start-screen');
 const gameOverlay = document.getElementById('game-overlay');
 const gameOverScreen = document.getElementById('game-over');
 const finalScoreElement = document.getElementById('final-score');
 const maxComboElement = document.getElementById('max-combo');
+const popupElement = document.getElementById('popup');
+const popupHeaderElement = document.getElementById('popup-header');
+const popupMessageElement = document.getElementById('popup-message');
 
 let snake = [];
 let direction = 'right';

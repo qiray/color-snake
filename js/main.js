@@ -26,6 +26,7 @@ function initGame() {
     combo = 0;
     gameSpeed = config.baseSpeed;
     currentColor = '#00FF7F';
+    loadRecords();
     updateScore();
     
     // Создаем еду
@@ -310,12 +311,6 @@ function showComboMessage(x, y, bonus, color) {
     }, 1500);
 }
 
-// Обновление счета
-function updateScore() {
-    scoreElement.textContent = score;
-    comboElement.textContent = combo;
-}
-
 // Конец игры
 function endGame() {
     clearInterval(gameInterval);
@@ -336,10 +331,9 @@ function updateComboElementStyle(color, shadow) {
     comboElement.style.textShadow = comboLabel.style.textShadow = shadow;
 }
 
-// Формула для комбо >15 (плавный рост)
-function getComboBonus(combo) {
-    if (combo < comboBonuses.length)
-        return comboBonuses[combo];
-    
-    return comboBonuses[comboBonuses.length - 1] + 250 * (combo - comboBonuses.length);
+function showPopupMessage(title, message) {
+    startScreen.classList.add('hidden');
+    popupElement.classList.remove('hidden');
+    popupHeaderElement.textContent = title;
+    popupMessageElement.textContent = message;
 }

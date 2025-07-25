@@ -22,8 +22,14 @@
     </div>
     <div id="game-container">
         <div id="game-header">
-            <div id="score-container"><span data-i18n="score_label"></span> <span id="score">0</span></div>
-            <div id="combo-container"><span id="combo-label" data-i18n="combo_label"></span> <span id="combo">0</span></div>
+            <div class="header-row">
+                <div id="best-score-container"><span data-i18n="best_score_label"></span> <span id="best-score">0</span></div>
+                <div id="best-combo-container"><span data-i18n="best_combo_label"></span> <span id="best-combo">0</span></div>
+            </div>
+            <div class="header-row">
+                <div id="score-container"><span data-i18n="score_label"></span> <span id="score">0</span></div>
+                <div id="combo-container"><span id="combo-label" data-i18n="combo_label"></span> <span id="combo">0</span></div>
+            </div>
         </div>
         <canvas id="gameCanvas" width="600" height="600"></canvas>
         
@@ -34,6 +40,7 @@
                 <p data-i18n="game_description"></p>
                 <button class="menu-button" id="start-button" data-i18n="start_button"></button>
                 <button class="menu-button" id="how-to-play-button" data-i18n="how_to_play"></button>
+                <button class="menu-button" id="clear-progress-button" data-i18n="clear_progress"></button>
                 <button class="menu-button" id="about-button" data-i18n="about_button"></button>
             </div>
             
@@ -42,6 +49,13 @@
                 <h2><span data-i18n="final_score"></span> <span id="final-score">0</span></h2>
                 <p><span data-i18n="max_combo"></span> <span id="max-combo">0</span></p>
                 <button id="restart-button" data-i18n="restart_button"></button>
+            </div>
+
+            <div id="popup" class="hidden">
+                <h2 id="popup-header"></h2>
+                <p id="popup-message"></p>
+                <button id="popup-yes-button" data-i18n="yes_button"></button>
+                <button id="popup-no-button" data-i18n="no_button"></button>
             </div>
 
             <div id="instructions" class="hidden">
@@ -64,6 +78,7 @@
     <script src="js/data.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/handlers.js"></script>
+    <script src="js/score.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

@@ -50,6 +50,21 @@ document.getElementById('instructions-ok-button').addEventListener('click', () =
     document.getElementById('instructions').classList.add('hidden');
 });
 
+document.getElementById('clear-progress-button').addEventListener('click', () => {
+    showPopupMessage(getTranslation("clear_progress"), getTranslation("clear_progress_question"));
+});
+
 document.getElementById('about-button').addEventListener('click', () => {
     // TODO:
+});
+
+document.getElementById("popup-yes-button").addEventListener('click', () => {
+    clearRecords();
+    popupElement.classList.add('hidden');
+    startScreen.classList.remove('hidden');
+});
+
+document.getElementById("popup-no-button").addEventListener('click', () => {
+    popupElement.classList.add('hidden');
+    startScreen.classList.remove('hidden');
 });
