@@ -1,5 +1,4 @@
 
-
 /**
  * Chameleon Snake Game - Core Logic
  * 
@@ -9,48 +8,6 @@
  * 
  * MIT Licensed
  */
-
-// Конфигурация игры
-const config = {
-    gridSize: 30,
-    initialSnakeLength: 4,
-    foodCount: 7,
-    baseSpeed: 140,
-    speedIncrease: 3
-};
-
-// Игровые переменные
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const scoreElement = document.getElementById('score');
-const comboElement = document.getElementById('combo');
-const comboLabel = document.getElementById('combo-label');
-const startScreen = document.getElementById('start-screen');
-const gameOverlay = document.getElementById('game-overlay');
-const gameOverScreen = document.getElementById('game-over');
-const finalScoreElement = document.getElementById('final-score');
-const maxComboElement = document.getElementById('max-combo');
-
-let snake = [];
-let direction = 'right';
-let nextDirection = 'right';
-let foods = [];
-let score = 0;
-let combo = 0;
-let maxCombo = 0;
-let currentColor = '#00FF7F';
-let gameInterval;
-let gameActive = false;
-let gameSpeed = config.baseSpeed;
-
-// Цвета для фруктов
-const colors = [
-    '#FF5252', // красный
-    '#FFD740', // жёлтый
-    '#7C4DFF', // фиолетовый
-    '#69F0AE', // зелёный
-    '#40C4FF'  // голубой
-];
 
 // Инициализация игры
 function initGame() {
@@ -189,8 +146,8 @@ function handleFoodEaten(food) {
         if (combo > maxCombo) maxCombo = combo;
         
         // Бонус за комбо
-        const comboBonus = combo * 20;
-        score += 10 + comboBonus;
+        const comboBonus = getComboBonus(combo);
+        score += comboBonus;
         
         // Показ сообщения о комбо
         showComboMessage(food.x * config.gridSize, food.y * config.gridSize, comboBonus, food.color);
@@ -377,4 +334,12 @@ function endGame() {
 function updateComboElementStyle(color, shadow) {
     comboElement.style.color = comboLabel.style.color = color;
     comboElement.style.textShadow = comboLabel.style.textShadow = shadow;
+}
+
+// Формула для комбо >15 (плавный рост)
+function getComboBonus(combo) {
+    if (combo < comboBonuses.length)
+        return comboBonuses[combo];
+    
+    return comboBonuses[comboBonuses.length - 1] + 250 * (combo - comboBonuses.length);
 }
