@@ -313,6 +313,7 @@ function showComboMessage(x, y, bonus, color) {
 
 // Конец игры
 function endGame() {
+    playSound("./SFX/mixkit-player-losing-or-failing-2042.wav")
     clearInterval(gameInterval);
     gameActive = false;
     

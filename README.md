@@ -1,8 +1,8 @@
 # Chameleon Snake Game
 
 <!-- TODO: Написать ридми. Плюс об авторах тоже (я + нейронки (сейчас дипсик только и Leonardo.AI для иконки)/ Написать про отсутствие react, npm и прочих мордных библиотек -->
-<!-- TODO: доделать все TODO -->
 <!-- TODO: Музыка и звуки -->
+<!-- TODO: настройка музыки и звуков -->
 <!-- TODO: Какое-то усложнение (бомбы или таймеры?) -->
 <!-- TODO: Пауза -->
 <!-- TODO: поправить логику ускорения, сделать попроще (уровни) -->
@@ -40,3 +40,4 @@
 - Yaroslav Zotov (https://github.com/qiray)
 - DeepSeek (https://www.deepseek.com/)
 - Leonardo.AI (https://leonardo.ai/)
+- Mixkit (https://mixkit.co)
