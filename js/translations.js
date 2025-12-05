@@ -22,6 +22,7 @@ const translations = {
         yes_button: "Да",
         no_button: "Нет",
         control_instruction: "Управляй змейкой с помощью клавиш ",
+        pause_instruction: "Пауза на клавише ",
         eat_instruction: "Съедай фрукты, чтобы расти и получать очки",
         color_change_instruction: "При съедании фрукта змейка меняет цвет на цвет фрукта",
         combo_instruction: "Съедай несколько фруктов одного цвета подряд для комбо",
@@ -36,7 +37,8 @@ const translations = {
         best_score_label: "Рекорд очков:",
         best_combo_label: "Рекордное комбо:",
         clear_progress: "Сбросить прогресс",
-        clear_progress_question: "Вы уверены, что хотите сбросить прогресс? Это действие нельзя отменить."
+        clear_progress_question: "Вы уверены, что хотите сбросить прогресс? Это действие нельзя отменить.",
+        resume_button: "Продолжить"
     },
     en: {
         title: "Chameleon snake",
@@ -49,6 +51,7 @@ const translations = {
         yes_button: "Yes",
         no_button: "No",
         control_instruction: "Control the snake using arrow keys ",
+        pause_instruction: "Pause on key ",
         eat_instruction: "Eat fruits to grow and score points",
         color_change_instruction: "When eating a fruit, the snake changes to the fruit's color",
         combo_instruction: "Eat several fruits of the same color in a row for a combo",
@@ -63,7 +66,8 @@ const translations = {
         best_score_label: "Max score:",
         best_combo_label: "Longest combo:",
         clear_progress: "Clear progress",
-        clear_progress_question: "Are you sure you want to reset your progress? This action cannot be undone."
+        clear_progress_question: "Are you sure you want to reset your progress? This action cannot be undone.",
+        resume_button: "Resume"
     }
 };
 

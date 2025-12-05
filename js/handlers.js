@@ -12,7 +12,7 @@
 // Обработка нажатий клавиш
 document.addEventListener('keydown', (e) => {
     if (!gameActive) return;
-    
+
     switch (e.key) {
         case 'ArrowUp':
             if (direction !== 'down') nextDirection = 'up';
@@ -25,6 +25,12 @@ document.addEventListener('keydown', (e) => {
             break;
         case 'ArrowRight':
             if (direction !== 'left') nextDirection = 'right';
+            break;
+        case 'p':
+        case 'P':
+        case 'з':
+        case 'З':
+            pauseGame();
             break;
     }
 });
@@ -68,3 +74,6 @@ document.getElementById("popup-no-button").addEventListener('click', () => {
     popupElement.classList.add('hidden');
     startScreen.classList.remove('hidden');
 });
+
+// Обработчик кнопки продолжения
+document.getElementById('resume-button').addEventListener('click', () => resumeGame());

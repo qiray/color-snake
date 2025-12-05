@@ -73,3 +73,5 @@ const comboBonuses = [
     1250, // 
     1500  // Максимальный бонус
 ];
+
+let gamePaused = false;

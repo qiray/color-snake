@@ -232,3 +232,13 @@ button:hover {
 .menu-button {
     width: 70%
 }
+
+#pause-indicator {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #ffcc00;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 5;
+}
