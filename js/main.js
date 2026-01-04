@@ -2,7 +2,7 @@
 /**
  * Chameleon Snake Game - Core Logic
  * 
- * Created: 2025
+ * Created: 2025-2026
  * Author: Yaroslav Zotov
  * AI-Assisted Development: Code generation
  * 
@@ -11,15 +11,9 @@
 
 // Инициализация игры
 function initGame() {
-    // Создаем змейку
-    snake = [];
-    for (let i = config.initialSnakeLength - 1; i >= 0; i--) {
-        snake.push({ x: i, y: 10 });
-    }
-
-    // Начальное направление
-    direction = 'right';
-    nextDirection = 'right';
+    currentLevel = 1
+    // Инициализация уровня
+    initLevel();
 
     // Сброс очков
     score = 0;
@@ -28,10 +22,6 @@ function initGame() {
     currentColor = '#00FF7F';
     loadRecords();
     updateScore();
-
-    // Создаем еду
-    foods = [];
-    addNewFood(config.foodCount);
 
     // Начинаем игровой цикл
     if (gameInterval) clearInterval(gameInterval);
@@ -157,21 +147,18 @@ function handleFoodEaten(food) {
         // Показ сообщения о комбо
         showComboMessage(food.x * config.gridSize, food.y * config.gridSize, comboBonus, food.color);
 
-        // Увеличиваем скорость
-        if (gameSpeed > 70) {
-            gameSpeed -= config.speedIncrease;
-            clearInterval(gameInterval);
-            gameInterval = setInterval(gameLoop, gameSpeed);
-        }
+        playSound("./SFX/mixkit-player-recharging-in-video-game-2041.wav")
     } else {
         combo = 1;
         score += 10;
+        playSound("./SFX/mixkit-game-success-alert-2039.wav")
     }
 
     // Обновляем текущий цвет
     currentColor = food.color;
     updateComboElementStyle(currentColor, `0 0 10px ${currentColor}`);
     updateScore();
+    checkLevelUp();
 }
 
 // Проверка столкновений
@@ -364,4 +351,86 @@ function resumeGame() {
         document.getElementById('resume-button').style.display = 'none';
         document.getElementById('start-button').style.display = 'inline-block';
     }
+}
+
+function increaseSpeed(increase) {
+    // Увеличиваем скорость
+    if (gameSpeed > levelConfig.maxSpeed) {
+        gameSpeed = Math.max(levelConfig.maxSpeed, gameSpeed - increase);
+        clearInterval(gameInterval);
+        gameInterval = setInterval(gameLoop, gameSpeed);
+    }
+}
+
+// Проверка и переход на новый уровень
+function checkLevelUp() {
+    if (snake.length >= levelConfig.segmentThreshold) {
+        levelUp();
+    }
+}
+
+// Обработка перехода на новый уровень
+function levelUp() {
+    currentLevel++;
+    // Показываем сообщение о новом уровне
+    showLevelUpMessage();
+    initLevel()
+    updateScore()
+    // Обновляем отображение уровня
+    updateLevelDisplay();
+}
+
+// Показать сообщение о новом уровне
+function showLevelUpMessage() { //TODO: play sound
+    const head = snake[0];
+    const x = head.x * config.gridSize;
+    const y = head.y * config.gridSize;
+    
+    const message = document.createElement('div');
+    message.className = 'combo-message';
+    message.textContent = `${getTranslation("level_up")} ${currentLevel}!`;
+    message.style.left = `${x}px`;
+    message.style.top = `${y}px`;
+    message.style.color = '#FFD700';
+    message.style.textShadow = '0 0 10px #FFD700, 0 0 20px #FFD700';
+    
+    document.getElementById('game-container').appendChild(message);
+    
+    // Добавляем анимацию к контейнеру уровня
+    const levelContainer = document.getElementById('level-container');
+    levelContainer.classList.add('level-up-animation');
+    
+    setTimeout(() => {
+        message.remove();
+        levelContainer.classList.remove('level-up-animation');
+    }, 1500);
+}
+
+// Обновить отображение уровня
+function updateLevelDisplay() {
+    const levelElement = document.getElementById('current-level');
+    if (levelElement) {
+        levelElement.textContent = currentLevel;
+    }
+}
+
+// Инициализация уровня
+function initLevel() {
+    // Создаем змейку
+    snake = [];
+    for (let i = config.initialSnakeLength - 1; i >= 0; i--) {
+        snake.push({ x: i, y: 10 });
+    }
+
+    // Начальное направление
+    direction = 'right';
+    nextDirection = 'right';
+
+    updateLevelDisplay();
+
+    // Создаем еду
+    foods = [];
+    addNewFood(config.foodCount);
+
+    combo = 0;
 }

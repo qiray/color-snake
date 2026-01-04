@@ -2,7 +2,7 @@
 /**
  * Chameleon Snake Game - Game Data
  * 
- * Created: 2025
+ * Created: 2025-2026
  * Author: Yaroslav Zotov
  * AI-Assisted Development: Code generation
  * 
@@ -75,3 +75,13 @@ const comboBonuses = [
 ];
 
 let gamePaused = false;
+
+// Конфигурация уровней
+const levelConfig = {
+    segmentThreshold: 14, // Количество сегментов для перехода на следующий уровень
+    speedIncrease: 10,    // Увеличение скорости на каждом уровне (в мс)
+    maxSpeed: 70          // Минимальная скорость (максимальная сложность)
+};
+
+// Переменные уровня
+let currentLevel = 1;

@@ -2,7 +2,7 @@
 /**
  * Chameleon Snake Game - Styles
  * 
- * Created: 2025
+ * Created: 2025-2026
  * Author: Yaroslav Zotov
  * AI-Assisted: Color scheme and layout suggestions
  * 
@@ -241,4 +241,73 @@ button:hover {
     font-size: 18px;
     font-weight: bold;
     z-index: 5;
+}
+
+/* Стили для контейнера уровня */
+#level-container {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    margin: 10px auto;
+    padding: 8px 20px;
+    text-align: center;
+    width: fit-content;
+    min-width: 150px;
+    border: 2px solid #FFD700;
+    box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
+}
+
+/* Текст уровня */
+#level-container span {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#level-container span:first-child {
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+}
+
+#current-level {
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.9);
+    margin-left: 8px;
+    font-size: 24px;
+}
+
+/* Возвращаем header-row к двум элементам */
+.header-row {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Делаем все элементы в header одинаковой ширины */
+#best-score-container, #best-combo-container {
+    flex: 1;
+    text-align: center;
+}
+
+#score-container, #combo-container {
+    flex: 1;
+    text-align: center;
+}
+
+/* Добавляем анимацию для перехода уровня */
+@keyframes levelUpGlow {
+    0% { 
+        border-color: #FFD700;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+    50% { 
+        border-color: #FFF;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.9);
+    }
+    100% { 
+        border-color: #FFD700;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+}
+
+.level-up-animation { /* TODO: another animation */
+    animation: levelUpGlow 1.5s ease-in-out;
 }

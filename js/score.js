@@ -2,7 +2,7 @@
 /**
  * Chameleon Snake Game - Score Logic
  * 
- * Created: 2025
+ * Created: 2025-2026
  * Author: Yaroslav Zotov
  * AI-Assisted Development: Code generation
  * 

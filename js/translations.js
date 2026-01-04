@@ -3,7 +3,7 @@
 /**
  * Chameleon Snake Game - Translations Logic
  * 
- * Created: 2025
+ * Created: 2025-2026
  * Author: Yaroslav Zotov
  * AI-Assisted Development: Code generation
  * 
@@ -38,7 +38,9 @@ const translations = {
         best_combo_label: "Рекордное комбо:",
         clear_progress: "Сбросить прогресс",
         clear_progress_question: "Вы уверены, что хотите сбросить прогресс? Это действие нельзя отменить.",
-        resume_button: "Продолжить"
+        resume_button: "Продолжить",
+        level_label: "Уровень:",
+        level_up: "УРОВЕНЬ"
     },
     en: {
         title: "Chameleon snake",
@@ -67,7 +69,9 @@ const translations = {
         best_combo_label: "Longest combo:",
         clear_progress: "Clear progress",
         clear_progress_question: "Are you sure you want to reset your progress? This action cannot be undone.",
-        resume_button: "Resume"
+        resume_button: "Resume",
+        level_label: "Level:",
+        level_up: "LEVEL"
     }
 };
 
