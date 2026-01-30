@@ -61,7 +61,11 @@ document.getElementById('clear-progress-button').addEventListener('click', () =>
 });
 
 document.getElementById('about-button').addEventListener('click', () => {
-    // TODO:
+    document.getElementById('about').classList.remove('hidden');
+});
+
+document.getElementById('about-ok-button').addEventListener('click', () => {
+    document.getElementById('about').classList.add('hidden');
 });
 
 document.getElementById("popup-yes-button").addEventListener('click', () => {

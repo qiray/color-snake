@@ -40,7 +40,22 @@ const translations = {
         clear_progress_question: "Вы уверены, что хотите сбросить прогресс? Это действие нельзя отменить.",
         resume_button: "Продолжить",
         level_label: "Уровень:",
-        level_up: "УРОВЕНЬ"
+        level_up: "УРОВЕНЬ",
+        about_title: "О проекте",
+        game_name: "Хамелеон-Змейка",
+        about_description: "Браузерная игра с уникальной механикой изменения цвета и комбо-системой",
+        development: "Разработка",
+        author: "Автор: ",
+        ai_assistance: "AI-ассистент",
+        ai_role: "- Полная генерация кодовой базы",
+        ai_role2: "- Дизайн и концепция игры",
+        ai_role3: "- Локализация и UX/UI решения",
+        assets: "Ресурсы",
+        game_icon: "Иконка игры",
+        sounds: "Звуковые эффекты",
+        myname: "Ярослав Зотов",
+        license: "Лицензия",
+        open_source: "Открытый исходный код - свободно для использования и модификации"
     },
     en: {
         title: "Chameleon snake",
@@ -71,7 +86,22 @@ const translations = {
         clear_progress_question: "Are you sure you want to reset your progress? This action cannot be undone.",
         resume_button: "Resume",
         level_label: "Level:",
-        level_up: "LEVEL"
+        level_up: "LEVEL",
+        about_title: "About",
+        game_name: "Chameleon Snake",
+        about_description: "Browser game with unique color-changing mechanics and combo system",
+        development: "Development",
+        author: "Author: ",
+        ai_assistance: "AI Assistant",
+        ai_role: "- Complete codebase generation",
+        ai_role2: "- Game design and concept",
+        ai_role3: "- Localization and UX/UI solutions",
+        assets: "Assets",
+        game_icon: "Game icon",
+        sounds: "Sound effects",
+        myname: "Yaroslav Zotov",
+        license: "License",
+        open_source: "Open source - free to use and modify"
     }
 };
 

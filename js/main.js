@@ -383,7 +383,7 @@ function levelUp() {
 }
 
 // Показать сообщение о новом уровне
-function showLevelUpMessage() { //TODO: play sound
+function showLevelUpMessage() {
     const head = snake[0];
     const x = head.x * config.gridSize;
     const y = head.y * config.gridSize;
@@ -401,6 +401,8 @@ function showLevelUpMessage() { //TODO: play sound
     // Добавляем анимацию к контейнеру уровня
     const levelContainer = document.getElementById('level-container');
     levelContainer.classList.add('level-up-animation');
+
+    playSound("./SFX/mixkit-game-success-alert-2039.wav")
     
     setTimeout(() => {
         message.remove();
