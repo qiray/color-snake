@@ -364,7 +364,7 @@ function increaseSpeed(increase) {
 
 // Проверка и переход на новый уровень
 function checkLevelUp() {
-    if (snake.length >= levelConfig.segmentThreshold) {
+    if (snake.length >= segmentThreshold) {
         levelUp();
     }
 }
@@ -378,6 +378,8 @@ function levelUp() {
     updateScore()
     // Обновляем отображение уровня
     updateLevelDisplay();
+    segmentThreshold += levelConfig.segmentThresholdIncrease
+    increaseSpeed(levelConfig.speedIncrease);
 }
 
 // Показать сообщение о новом уровне

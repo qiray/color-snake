@@ -14,8 +14,7 @@ const config = {
     gridSize: 30,
     initialSnakeLength: 4,
     foodCount: 7,
-    baseSpeed: 140,
-    speedIncrease: 3
+    baseSpeed: 150
 };
 
 // Игровые переменные
@@ -79,9 +78,11 @@ let gamePaused = false;
 // Конфигурация уровней
 const levelConfig = {
     segmentThreshold: 14, // Количество сегментов для перехода на следующий уровень
-    speedIncrease: 10,    // Увеличение скорости на каждом уровне (в мс)
-    maxSpeed: 70          // Минимальная скорость (максимальная сложность)
+    segmentThresholdIncrease: 1, // Увеличение максимальной длины на каждом уровне 
+    speedIncrease: 5,    // Увеличение скорости на каждом уровне (в мс)
+    maxSpeed: 50          // Минимальная скорость (максимальная сложность)
 };
 
 // Переменные уровня
 let currentLevel = 1;
+let segmentThreshold = levelConfig.segmentThreshold;
