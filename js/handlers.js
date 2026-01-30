@@ -77,3 +77,8 @@ document.getElementById("popup-no-button").addEventListener('click', () => {
 
 // Обработчик кнопки продолжения
 document.getElementById('resume-button').addEventListener('click', () => resumeGame());
+
+window.addEventListener('load', function () {
+    canvas.width = window.innerHeight > smallScreen ? 600 : 400;
+    canvas.height = window.innerHeight > smallScreen ? 600 : 400;
+});

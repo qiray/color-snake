@@ -9,9 +9,11 @@
  * MIT Licensed
  */
 
+const smallScreen = 700;
+
 // Конфигурация игры
 const config = {
-    gridSize: 30,
+    gridSize: window.innerHeight > smallScreen ? 30 : 20,
     initialSnakeLength: 4,
     foodCount: 7,
     baseSpeed: 150

@@ -308,6 +308,43 @@ button:hover {
     }
 }
 
-.level-up-animation { /* TODO: another animation */
+.level-up-animation {
     animation: levelUpGlow 1.5s ease-in-out;
+}
+
+@media screen and (max-width: 700px) {
+    #game-container {
+        width: 400px;
+    }
+
+    #score-container, #combo-container, #best-score-container, #best-combo-container {
+        font-size: 18px;
+    }
+
+    #combo-container {
+        font-size: 18px;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    button {
+        font-size: 16px;
+        border-radius: 35px;
+        padding: 12px 25px;
+        margin-top: 15px;
+    }
+
+    .combo-message {
+        font-size: 20px;
+    }
 }
