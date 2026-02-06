@@ -11,6 +11,7 @@
 
 // Инициализация игры
 function initGame() {
+    segmentThreshold = levelConfig.segmentThreshold
     currentLevel = 1
     // Инициализация уровня
     initLevel();
