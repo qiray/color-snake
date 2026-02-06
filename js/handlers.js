@@ -83,6 +83,40 @@ document.getElementById("popup-no-button").addEventListener('click', () => {
 document.getElementById('resume-button').addEventListener('click', () => resumeGame());
 
 window.addEventListener('load', function () {
-    canvas.width = window.innerHeight > smallScreen ? 600 : 400;
-    canvas.height = window.innerHeight > smallScreen ? 600 : 400;
+    const canvas = document.getElementById('gameCanvas');
+    const container = document.getElementById('game-container');
+    
+    // Устанавливаем размер canvas равным размеру контейнера
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientWidth; // Квадратный canvas
+    
+    // Инициализируем игру если нужно
+    if (!gameActive) {
+        drawGame();
+    }
 });
+
+window.addEventListener('resize', handleResize);
+
+function handleResize() {
+    const canvas = document.getElementById('gameCanvas');
+    const container = document.getElementById('game-container');
+    
+    // Сохраняем текущее состояние игры
+    const wasActive = gameActive;
+    const oldInterval = gameInterval;
+    
+    if (wasActive) {
+        clearInterval(oldInterval);
+        gameActive = false;
+    }
+    
+    // Принудительная перерисовка
+    setTimeout(() => {
+        if (wasActive) {
+            gameActive = true;
+            gameInterval = setInterval(gameLoop, gameSpeed);
+        }
+        drawGame();
+    }, 100);
+}

@@ -10,6 +10,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
     <title data-i18n="title">Chameleon snake</title>
     <link rel="stylesheet" href="css/style.css">
@@ -35,7 +36,7 @@
             <span data-i18n="level_label"></span> 
             <span id="current-level">1</span>
         </div>
-        <canvas id="gameCanvas" width="600" height="600"></canvas>
+        <canvas id="gameCanvas"></canvas>
         
         <div id="game-overlay">
             <div id="start-screen">
@@ -125,5 +126,6 @@
     <script src="js/score.js"></script>
     <script src="js/sfx.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/resize.js"></script>
 </body>
 </html>

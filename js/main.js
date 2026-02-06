@@ -9,6 +9,28 @@
  * MIT Licensed
  */
 
+function calculateGridSize() {
+    const canvas = document.getElementById('gameCanvas');
+    const container = document.getElementById('game-container');
+    
+    // Определяем размер клетки в зависимости от размера canvas
+    const canvasSize = Math.min(canvas.width, canvas.height);
+    
+    // Динамический размер сетки в зависимости от размера экрана
+    if (canvasSize <= 400) {
+        gridSize = 15; // Для маленьких экранов
+    } else if (canvasSize <= 500) {
+        gridSize = 20; // Для средних экранов
+    } else {
+        gridSize = 25; // Для больших экранов
+    }
+    
+    // Рассчитываем размер клетки
+    cellSize = canvasSize / gridSize;
+    
+    return { gridSize, cellSize };
+}
+
 // Инициализация игры
 function initGame() {
     segmentThreshold = levelConfig.segmentThreshold
@@ -38,6 +60,8 @@ function initGame() {
 
 // Генерация еды
 function addNewFood(count) {
+    const { gridSize } = calculateGridSize();
+    
     for (let i = 0; i < count; i++) {
         let newFood;
         let overlapping;
@@ -46,8 +70,8 @@ function addNewFood(count) {
         do {
             overlapping = false;
             newFood = {
-                x: Math.floor(Math.random() * (canvas.width / config.gridSize)),
-                y: Math.floor(Math.random() * (canvas.height / config.gridSize)),
+                x: Math.floor(Math.random() * gridSize),
+                y: Math.floor(Math.random() * gridSize),
                 color: colors[Math.floor(Math.random() * colors.length)]
             };
 
@@ -69,7 +93,6 @@ function addNewFood(count) {
                 }
             }
 
-            // Защита от бесконечного цикла
             attempts++;
             if (attempts > 100) {
                 console.log("Не удалось разместить новый фрукт");
@@ -93,7 +116,8 @@ function gameLoop() {
 // Движение змейки
 function moveSnake() {
     direction = nextDirection;
-
+    const { gridSize, cellSize } = calculateGridSize();
+    
     // Копируем голову
     const head = { ...snake[0] };
 
@@ -106,10 +130,10 @@ function moveSnake() {
     }
 
     // Телепортация через стены
-    if (head.x < 0) head.x = (canvas.width / config.gridSize) - 1;
-    if (head.x >= canvas.width / config.gridSize) head.x = 0;
-    if (head.y < 0) head.y = (canvas.height / config.gridSize) - 1;
-    if (head.y >= canvas.height / config.gridSize) head.y = 0;
+    if (head.x < 0) head.x = gridSize - 1;
+    if (head.x >= gridSize) head.x = 0;
+    if (head.y < 0) head.y = gridSize - 1;
+    if (head.y >= gridSize) head.y = 0;
 
     // Добавляем новую голову
     snake.unshift(head);
@@ -118,17 +142,15 @@ function moveSnake() {
     let foodEaten = false;
     for (let i = 0; i < foods.length; i++) {
         if (head.x === foods[i].x && head.y === foods[i].y) {
-            // Обработка съедения еды
             handleFoodEaten(foods[i]);
             foods.splice(i, 1);
-            const newFoodCount = 1 + Math.floor(Math.random() * 2); // Добавляем 1 или 2 новых фрукта
+            const newFoodCount = 1 + Math.floor(Math.random() * 2);
             addNewFood(newFoodCount);
             foodEaten = true;
             break;
         }
     }
 
-    // Если еда не была съедена, удаляем хвост
     if (!foodEaten) {
         snake.pop();
     }
@@ -179,24 +201,27 @@ function checkCollisions() {
 function drawGame() {
     // Очистка холста
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    
+    // Рассчитываем размеры
+    const { gridSize, cellSize } = calculateGridSize();
+    
     // Отрисовка сетки
-    drawGrid();
-
-    // Отрисовка змейки
+    drawGrid(gridSize, cellSize);
+    
+    // Отрисовка змейки с новыми размерами
     for (let i = 0; i < snake.length; i++) {
-        // Голова другого цвета
         const color = i === 0 ? '#FFFFFF' : currentColor;
-
+        const radius = cellSize / 2 - 1;
+        
         ctx.fillStyle = color;
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
 
         ctx.beginPath();
         ctx.arc(
-            snake[i].x * config.gridSize + config.gridSize / 2,
-            snake[i].y * config.gridSize + config.gridSize / 2,
-            config.gridSize / 2 - 1,
+            snake[i].x * cellSize + cellSize / 2,
+            snake[i].y * cellSize + cellSize / 2,
+            radius,
             0,
             Math.PI * 2
         );
@@ -206,8 +231,6 @@ function drawGame() {
         // Глаза у головы
         if (i === 0) {
             ctx.fillStyle = '#000';
-
-            // Позиция глаз в зависимости от направления
             let eyeOffsetX = 0;
             let eyeOffsetY = 0;
 
@@ -220,8 +243,8 @@ function drawGame() {
 
             ctx.beginPath();
             ctx.arc(
-                snake[i].x * config.gridSize + config.gridSize / 2 + eyeOffsetX,
-                snake[i].y * config.gridSize + config.gridSize / 2 + eyeOffsetY,
+                snake[i].x * cellSize + cellSize / 2 + eyeOffsetX,
+                snake[i].y * cellSize + cellSize / 2 + eyeOffsetY,
                 2,
                 0,
                 Math.PI * 2
@@ -229,19 +252,20 @@ function drawGame() {
             ctx.fill();
         }
     }
-
-    // Отрисовка еды
+    
+    // Отрисовка еды с новыми размерами
     for (const food of foods) {
+        const radius = cellSize / 2 - 2;
+        
         ctx.fillStyle = food.color;
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
 
-        // Рисуем фрукты в виде кружков с эффектом блика
         ctx.beginPath();
         ctx.arc(
-            food.x * config.gridSize + config.gridSize / 2,
-            food.y * config.gridSize + config.gridSize / 2,
-            config.gridSize / 2 - 2,
+            food.x * cellSize + cellSize / 2,
+            food.y * cellSize + cellSize / 2,
+            radius,
             0,
             Math.PI * 2
         );
@@ -252,8 +276,8 @@ function drawGame() {
         ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
         ctx.beginPath();
         ctx.arc(
-            food.x * config.gridSize + config.gridSize / 2 - 3,
-            food.y * config.gridSize + config.gridSize / 2 - 3,
+            food.x * cellSize + cellSize / 2 - 3,
+            food.y * cellSize + cellSize / 2 - 3,
             3,
             0,
             Math.PI * 2
@@ -263,12 +287,12 @@ function drawGame() {
 }
 
 // Отрисовка сетки
-function drawGrid() {
+function drawGrid(gridSize, cellSize) {
     ctx.strokeStyle = 'rgba(0, 100, 200, 0.2)';
     ctx.lineWidth = 0.5;
 
     // Вертикальные линии
-    for (let x = 0; x <= canvas.width; x += config.gridSize) {
+    for (let x = 0; x <= canvas.width; x += cellSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x, canvas.height);
@@ -276,7 +300,7 @@ function drawGrid() {
     }
 
     // Горизонтальные линии
-    for (let y = 0; y <= canvas.height; y += config.gridSize) {
+    for (let y = 0; y <= canvas.height; y += cellSize) {
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(canvas.width, y);
@@ -286,13 +310,12 @@ function drawGrid() {
 
 // Показать сообщение о комбо
 function showComboMessage(x, y, bonus, color) {
+    const { cellSize } = calculateGridSize();
     const message = document.createElement('div');
     message.className = 'combo-message';
     message.textContent = `+${bonus} ${getTranslation("combo_message")} x${combo}!`;
-    message.style.left = `${x}px`;
-    message.style.top = `${y}px`;
-
-    // Устанавливаем цвет из параметра
+    message.style.left = `${x * cellSize}px`;
+    message.style.top = `${y * cellSize}px`;
     message.style.color = color;
     message.style.textShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
 
@@ -386,8 +409,9 @@ function levelUp() {
 // Показать сообщение о новом уровне
 function showLevelUpMessage() {
     const head = snake[0];
-    const x = head.x * config.gridSize;
-    const y = head.y * config.gridSize;
+    const { cellSize } = calculateGridSize();
+    const x = head.x * cellSize;
+    const y = head.y * cellSize;
     
     const message = document.createElement('div');
     message.className = 'combo-message';
@@ -399,11 +423,10 @@ function showLevelUpMessage() {
     
     document.getElementById('game-container').appendChild(message);
     
-    // Добавляем анимацию к контейнеру уровня
     const levelContainer = document.getElementById('level-container');
     levelContainer.classList.add('level-up-animation');
-
-    playSound("./SFX/mixkit-game-success-alert-2039.wav")
+    
+    playSound("./SFX/mixkit-game-success-alert-2039.wav");
     
     setTimeout(() => {
         message.remove();
