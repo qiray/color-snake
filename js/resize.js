@@ -41,3 +41,10 @@ function setupResponsiveGame() {
 
 // Запуск при загрузке страницы
 document.addEventListener('DOMContentLoaded', setupResponsiveGame);
+
+var viewportWidth = window.innerWidth;
+var viewportHeight = window.innerHeight;
+
+// Example of displaying the values
+console.log("Viewport Width: " + viewportWidth + "px");
+console.log("Viewport Height: " + viewportHeight + "px");
