@@ -170,11 +170,11 @@ function handleFoodEaten(food) {
         // Показ сообщения о комбо
         showComboMessage(food.x * config.gridSize, food.y * config.gridSize, comboBonus, food.color);
 
-        playSound("./SFX/mixkit-player-recharging-in-video-game-2041.wav")
-    } else {
+        playSound("combo")
+    } else {combo
         combo = 1;
         score += 10;
-        playSound("./SFX/mixkit-game-success-alert-2039.wav")
+        playSound("eat")
     }
 
     // Обновляем текущий цвет
@@ -328,7 +328,7 @@ function showComboMessage(x, y, bonus, color) {
 
 // Конец игры
 function endGame() {
-    playSound("./SFX/mixkit-player-losing-or-failing-2042.wav")
+    playSound("gameOver")
     clearInterval(gameInterval);
     gameActive = false;
 
@@ -426,7 +426,7 @@ function showLevelUpMessage() {
     const levelContainer = document.getElementById('level-container');
     levelContainer.classList.add('level-up-animation');
     
-    playSound("./SFX/mixkit-game-success-alert-2039.wav");
+    playSound("levelUp");
     
     setTimeout(() => {
         message.remove();
