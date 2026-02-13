@@ -457,3 +457,76 @@ button:hover, .menu-button:hover {
     margin: 0 3px;
     font-size: clamp(12px, 2vw, 16px);
 }
+
+/* ===== Мобильные кнопки управления ===== */
+.mobile-controls {
+    display: none; /* скрыты на десктопе по умолчанию */
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.controls-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.control-btn {
+    background: linear-gradient(to bottom, #ffcc00, #ff6600);
+    border: none;
+    border-radius: 50px;
+    color: #1a1a2e;
+    font-size: 8vw;
+    font-weight: bold;
+    cursor: pointer;
+    width: 22vw;
+    height: 15vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
+    transition: all 0.1s ease;
+    user-select: none;
+    touch-action: manipulation;
+    padding: 0;
+    line-height: 1;
+    margin-top: 10px;
+}
+
+.control-btn:active {
+    transform: scale(0.9);
+    box-shadow: 0 2px 10px rgba(255, 102, 0, 0.8);
+}
+
+.pause-btn {
+    font-size: 12vw;
+}
+
+/* Показываем кнопки только на мобильных устройствах */
+@media (max-width: 768px) {
+    .mobile-controls {
+        display: flex;
+    }
+}
+
+/* Для очень маленьких экранов уменьшаем отступы */
+@media (max-width: 480px) {
+    .controls-row {
+        gap: 10px;
+    }
+}
+
+/* Альбомная ориентация на телефонах */
+@media (orientation: landscape) and (max-height: 600px) {
+    .mobile-controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .controls-row {
+        width: auto;
+    }
+}

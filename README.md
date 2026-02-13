@@ -97,7 +97,7 @@ This project was created with key participation from **DeepSeek AI** in the foll
 ## 📈 Development Plans
 
 ### Upcoming Updates:
-- [ ] Mobile version with touch controls
+- [x] Mobile version with touch controls
 - [ ] New game elements (bombs, walls, speed boosts)
 - [ ] Background music and sound settings
 

@@ -120,3 +120,52 @@ function handleResize() {
         drawGame();
     }, 100);
 }
+
+// ===== Обработчики мобильных кнопок =====
+function initMobileControls() {
+    const btnUp = document.getElementById('btn-up');
+    const btnDown = document.getElementById('btn-down');
+    const btnLeft = document.getElementById('btn-left');
+    const btnRight = document.getElementById('btn-right');
+    const btnPause = document.getElementById('btn-pause');
+
+    if (!btnUp) return; // если кнопок нет в DOM
+
+    // Вспомогательная функция для обработки нажатия
+    function handleDirection(newDir, oppositeDir) {
+        if (gameActive && direction !== oppositeDir) {
+            nextDirection = newDir;
+        }
+    }
+
+    // Стрелки – обрабатываем touch и mouse события
+    const addBtnListener = (btn, eventType, handler) => {
+        btn.addEventListener(eventType, (e) => {
+            e.preventDefault(); // предотвращаем прокрутку страницы
+            handler();
+        });
+    };
+
+    addBtnListener(btnUp, 'touchstart', () => handleDirection('up', 'down'));
+    addBtnListener(btnUp, 'mousedown', () => handleDirection('up', 'down'));
+
+    addBtnListener(btnDown, 'touchstart', () => handleDirection('down', 'up'));
+    addBtnListener(btnDown, 'mousedown', () => handleDirection('down', 'up'));
+
+    addBtnListener(btnLeft, 'touchstart', () => handleDirection('left', 'right'));
+    addBtnListener(btnLeft, 'mousedown', () => handleDirection('left', 'right'));
+
+    addBtnListener(btnRight, 'touchstart', () => handleDirection('right', 'left'));
+    addBtnListener(btnRight, 'mousedown', () => handleDirection('right', 'left'));
+
+    // Кнопка паузы – вызывает pauseGame (как клавиша P)
+    addBtnListener(btnPause, 'touchstart', pauseGame);
+    addBtnListener(btnPause, 'mousedown', pauseGame);
+}
+
+// Инициализируем после загрузки DOM
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileControls);
+} else {
+    initMobileControls();
+}
