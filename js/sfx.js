@@ -9,48 +9,116 @@
  */
 
 /**
- * sfx.js – Оптимизированное воспроизведение звуков (предзагрузка, переиспользование)
+ * sfx.js – Воспроизведение звуков с автоопределением протокола
+ * (Web Audio API для http/https, Audio-элементы для file://)
  */
 
-// Хранилище предзагруженных звуков
-const sounds = {};
+// Определяем протокол загрузки страницы
+const isFileProtocol = window.location.protocol === 'file:';
 
-// Предзагрузка всех звуков при загрузке страницы
-document.addEventListener('DOMContentLoaded', () => {
-    preloadSound('eat', './SFX/mixkit-game-success-alert-2039.mp3');
-    preloadSound('combo', './SFX/mixkit-player-recharging-in-video-game-2041.mp3');
-    preloadSound('gameOver', './SFX/mixkit-player-losing-or-failing-2042.mp3');
-    preloadSound('levelUp', './SFX/mixkit-game-success-alert-2039.mp3'); // можно отдельный файл
-});
+// ========== Режим для file:// (старая логика) ==========
+if (isFileProtocol) {
+    // Хранилище предзагруженных Audio-элементов
+    const sounds = {};
 
-function preloadSound(key, url) {
-    const audio = new Audio(url);
-    audio.preload = 'auto';
-    audio.load();            // начинаем загрузку сразу
-    sounds[key] = audio;
+    function preloadSound(key, url) {
+        const audio = new Audio(url);
+        audio.preload = 'auto';
+        audio.load();
+        sounds[key] = audio;
+    }
+
+    // Предзагрузка звуков
+    document.addEventListener('DOMContentLoaded', () => {
+        preloadSound('eat', './SFX/mixkit-game-success-alert-2039.mp3');
+        preloadSound('combo', './SFX/mixkit-player-recharging-in-video-game-2041.mp3');
+        preloadSound('gameOver', './SFX/mixkit-player-losing-or-failing-2042.mp3');
+        preloadSound('levelUp', './SFX/mixkit-game-success-alert-2039.mp3');
+    });
+
+    // Глобальная функция playSound для file://
+    window.playSound = function(key) {
+        const audio = sounds[key];
+        if (!audio) {
+            console.warn(`Звук "${key}" не найден`);
+            return;
+        }
+        audio.currentTime = 0;
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(e => console.log('Воспроизведение заблокировано:', e));
+        }
+    };
 }
+// ========== Режим для http/https (Web Audio API) ==========
+else {
+    let audioContext = null;
+    const soundBuffers = {};
 
-/**
- * Воспроизвести звук по ключу
- * @param {string} key - один из: 'eat', 'combo', 'gameOver', 'levelUp'
- */
-function playSound(key) {
-    const audio = sounds[key];
-    if (!audio) {
-        console.warn(`Звук с ключом "${key}" не найден`);
-        return;
+    function initAudioContext() {
+        if (audioContext) return;
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        // Загружаем все звуки сразу после активации контекста
+        loadSound('eat', './SFX/mixkit-game-success-alert-2039.mp3');
+        loadSound('combo', './SFX/mixkit-player-recharging-in-video-game-2041.mp3');
+        loadSound('gameOver', './SFX/mixkit-player-losing-or-failing-2042.mp3');
+        loadSound('levelUp', './SFX/mixkit-game-success-alert-2039.mp3');
     }
 
-    // Сбрасываем время, если звук уже играл
-    audio.currentTime = 0;
-
-    // Пытаемся воспроизвести
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-        playPromise.catch(error => {
-            // На мобильных автовоспроизведение может быть заблокировано до первого жеста.
-            // Игра продолжит работать без звука – это некритично.
-            console.log('Воспроизведение звука заблокировано браузером:', error);
-        });
+    async function loadSound(key, url) {
+        if (!audioContext) return;
+        try {
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+            const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+            soundBuffers[key] = audioBuffer;
+        } catch (e) {
+            console.warn(`Не удалось загрузить звук ${key}:`, e);
+        }
     }
+
+    function playBuffer(buffer) {
+        const source = audioContext.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioContext.destination);
+        source.start(0);
+    }
+
+    function playSound(key) {
+        if (!audioContext) {
+            initAudioContext();
+            if (!audioContext) return;
+        }
+
+        const buffer = soundBuffers[key];
+        if (!buffer) {
+            console.warn(`Буфер для звука "${key}" ещё не загружен`);
+            return;
+        }
+
+        if (audioContext.state === 'suspended') {
+            audioContext.resume().then(() => playBuffer(buffer))
+                .catch(e => console.log('Не удалось возобновить AudioContext:', e));
+            return;
+        }
+
+        playBuffer(buffer);
+    }
+
+    // Активация контекста при первом жесте пользователя
+    function activateAudioOnUserGesture() {
+        initAudioContext();
+        document.removeEventListener('touchstart', activateAudioOnUserGesture);
+        document.removeEventListener('touchend', activateAudioOnUserGesture);
+        document.removeEventListener('keydown', activateAudioOnUserGesture);
+        document.removeEventListener('click', activateAudioOnUserGesture);
+    }
+
+    document.addEventListener('touchstart', activateAudioOnUserGesture, { once: true });
+    document.addEventListener('touchend', activateAudioOnUserGesture, { once: true });
+    document.addEventListener('keydown', activateAudioOnUserGesture, { once: true });
+    document.addEventListener('click', activateAudioOnUserGesture, { once: true });
+
+    // Глобальная функция playSound для http/https
+    window.playSound = playSound;
 }
