@@ -35,6 +35,7 @@ function preloadSound(key, url) {
  * @param {string} key - один из: 'eat', 'combo', 'gameOver', 'levelUp'
  */
 function playSound(key) {
+    return; //TODO:
     const audio = sounds[key];
     if (!audio) {
         console.warn(`Звук с ключом "${key}" не найден`);
