@@ -1,5 +1,6 @@
+
 /**
- * Chameleon Snake Game - Sounds (Web Audio API version)
+ * Chameleon Snake Game - Sounds
  * 
  * Created: 2025-2026
  * Author: Yaroslav Zotov
@@ -8,116 +9,48 @@
  */
 
 /**
- * sfx.js – Воспроизведение звуков через Web Audio API (предзагрузка, переиспользование)
+ * sfx.js – Оптимизированное воспроизведение звуков (предзагрузка, переиспользование)
  */
 
-// Глобальный аудиоконтекст (один на всю игру)
-let audioContext = null;
-
-// Хранилище декодированных буферов
-const buffers = {};
-
-// Очередь звуков, которые запросили до активации контекста (опционально)
-const pendingSounds = [];
+// Хранилище предзагруженных звуков
+const sounds = {};
 
 // Предзагрузка всех звуков при загрузке страницы
-function initSounds() {
-    if (audioContext)
-        return
-    // Создаём контекст сразу (он будет в состоянии suspended)
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+document.addEventListener('DOMContentLoaded', () => {
+    preloadSound('eat', './SFX/mixkit-game-success-alert-2039.mp3');
+    preloadSound('combo', './SFX/mixkit-player-recharging-in-video-game-2041.mp3');
+    preloadSound('gameOver', './SFX/mixkit-player-losing-or-failing-2042.mp3');
+    preloadSound('levelUp', './SFX/mixkit-game-success-alert-2039.mp3'); // можно отдельный файл
+});
 
-    // Загружаем и декодируем звуки
-    preloadSound('eat', './SFX/mixkit-game-success-alert-2039.wav');
-    preloadSound('combo', './SFX/mixkit-player-recharging-in-video-game-2041.wav');
-    preloadSound('gameOver', './SFX/mixkit-player-losing-or-failing-2042.wav');
-    preloadSound('levelUp', './SFX/mixkit-game-success-alert-2039.wav');
-
-    // Устанавливаем обработчик первого касания для активации контекста
-    setupFirstGesture();
-};
-
-/**
- * Устанавливает обработчик первого пользовательского жеста
- */
-function setupFirstGesture() {
-    const gestureEvents = ['touchstart', 'touchend', 'mousedown', 'keydown'];
-    const handler = async () => {
-        // Удаляем все обработчики после первого срабатывания
-        for (const event of gestureEvents) {
-            document.removeEventListener(event, handler);
-        }
-        // Активируем контекст
-        if (audioContext && audioContext.state === 'suspended') {
-            try {
-                await audioContext.resume();
-                console.log('AudioContext активирован по жесту');
-                // Воспроизводим звуки из очереди, если хотим
-                playPendingSounds();
-            } catch (error) {
-                console.error('Ошибка активации AudioContext:', error);
-            }
-        }
-    };
-    for (const event of gestureEvents) {
-        document.addEventListener(event, handler, { once: false }); // once:false, но мы удалим вручную
-    }
-}
-
-/**
- * Воспроизводит звуки, которые были запрошены до активации
- */
-function playPendingSounds() {
-    while (pendingSounds.length) {
-        const key = pendingSounds.shift();
-        actuallyPlaySound(key);
-    }
-}
-
-/**
- * Загружает и декодирует аудиофайл, сохраняет буфер
- */
-async function preloadSound(key, url) {
-    if (!audioContext) return;
-    try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-        buffers[key] = audioBuffer;
-        console.log(`Звук "${key}" загружен и декодирован`);
-    } catch (error) {
-        console.error(`Ошибка загрузки звука "${key}":`, error);
-    }
+function preloadSound(key, url) {
+    const audio = new Audio(url);
+    audio.preload = 'auto';
+    audio.load();            // начинаем загрузку сразу
+    sounds[key] = audio;
 }
 
 /**
  * Воспроизвести звук по ключу
+ * @param {string} key - один из: 'eat', 'combo', 'gameOver', 'levelUp'
  */
 function playSound(key) {
-    // Если контекст ещё не активирован, добавляем в очередь (опционально)
-    if (!audioContext || audioContext.state !== 'running') {
-        // Можно либо игнорировать, либо сохранить для воспроизведения позже
-        pendingSounds.push(key);
+    const audio = sounds[key];
+    if (!audio) {
+        console.warn(`Звук с ключом "${key}" не найден`);
         return;
     }
-    actuallyPlaySound(key);
-}
 
-/**
- * Реальная функция воспроизведения (вызывается только при активном контексте)
- */
-function actuallyPlaySound(key) {
-    const buffer = buffers[key];
-    if (!buffer) {
-        console.warn(`Буфер для ключа "${key}" не найден`);
-        return;
-    }
-    try {
-        const source = audioContext.createBufferSource();
-        source.buffer = buffer;
-        source.connect(audioContext.destination);
-        source.start();
-    } catch (error) {
-        console.error(`Ошибка воспроизведения звука "${key}":`, error);
+    // Сбрасываем время, если звук уже играл
+    audio.currentTime = 0;
+
+    // Пытаемся воспроизвести
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            // На мобильных автовоспроизведение может быть заблокировано до первого жеста.
+            // Игра продолжит работать без звука – это некритично.
+            console.log('Воспроизведение звука заблокировано браузером:', error);
+        });
     }
 }

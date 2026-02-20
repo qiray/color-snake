@@ -40,7 +40,6 @@ document.getElementById('start-button').addEventListener('click', () => {
     startScreen.classList.add('hidden');
     gameOverlay.classList.add('hidden');
     initGame();
-    initSounds();
 });
 
 document.getElementById('restart-button').addEventListener('click', () => {
