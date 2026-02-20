@@ -290,22 +290,22 @@ function drawGame() {
 function drawGrid(gridSize, cellSize) {
     ctx.strokeStyle = 'rgba(0, 100, 200, 0.2)';
     ctx.lineWidth = 0.5;
-
-    // Вертикальные линии
+    
+    // Вертикальные линии одним путем
+    ctx.beginPath();
     for (let x = 0; x <= canvas.width; x += cellSize) {
-        ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x, canvas.height);
-        ctx.stroke();
     }
+    ctx.stroke();
 
     // Горизонтальные линии
+    ctx.beginPath();
     for (let y = 0; y <= canvas.height; y += cellSize) {
-        ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(canvas.width, y);
-        ctx.stroke();
     }
+    ctx.stroke();
 }
 
 // Показать сообщение о комбо
