@@ -94,3 +94,9 @@ const levelConfig = {
 // Переменные уровня
 let currentLevel = 1;
 let segmentThreshold = levelConfig.segmentThreshold;
+
+// Для анимированных сообщений на Canvas
+let activeMessages = [];
+const MESSAGE_DURATION = 1500;      // мс
+const MESSAGE_RISE = 80;            // пикселей подъёма
+const MESSAGE_SCALE = 1.3;          // финальный масштаб

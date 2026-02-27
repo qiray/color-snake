@@ -294,6 +294,7 @@ function drawGame() {
         );
         ctx.fill();
     }
+    drawMessages();
 }
 
 // Отрисовка сетки
@@ -319,37 +320,24 @@ function drawGrid(gridSize, cellSize) {
 }
 
 function showComboMessage(x, y, bonus, color) {
-    const messageElement = document.getElementById('combo-message');
-    if (!messageElement) return;
+    // Задаем минимальные координаты
+    x = Math.max(x, 3)
+    y = Math.max(y, 3)
 
-    // Сброс анимации
-    messageElement.classList.add('hidden');
-    void messageElement.offsetWidth; // форсируем reflow
-
-    // Устанавливаем текст и цвет
-    messageElement.textContent = `+${bonus} ${getTranslation("combo_message")} x${combo}!`;
-    messageElement.style.color = color;
-    messageElement.style.textShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
-
-    // Получаем размер клетки
     const { cellSize } = getCachedGrid();
-
-    // Координаты центра клетки (в пикселях) относительно контейнера
-    const posX = x * cellSize + cellSize / 2;
-    const posY = canvas.offsetTop + y * cellSize + cellSize / 2;
-
-    // Устанавливаем left и top
-    messageElement.style.left = posX + 'px';
-    messageElement.style.top = posY + 'px';
-    messageElement.style.transform = ''; // убираем лишний transform
-
-    // Показываем
-    messageElement.classList.remove('hidden');
-
-    // Скрываем через 1.5 секунды
-    setTimeout(() => {
-        messageElement.classList.add('hidden');
-    }, 1500);
+    const pixelX = x * cellSize + cellSize / 2;
+    const pixelY = y * cellSize + cellSize / 2;
+    
+    const text = `+${bonus} ${getTranslation("combo_message")} x${combo}!`;
+    
+    activeMessages.push({
+        text: text,
+        color: color,
+        x: pixelX,
+        y: pixelY,
+        startTime: performance.now(),
+        duration: MESSAGE_DURATION
+    });
 }
 
 // Конец игры
@@ -441,30 +429,23 @@ function levelUp() {
 
 // Показать сообщение о новом уровне
 function showLevelUpMessage() {
-    const head = snake[0];
-    const { cellSize } = getCachedGrid();
-    const x = head.x * cellSize;
-    const y = head.y * cellSize;
+    const { cellSize, gridSize } = getCachedGrid();
+    const x = gridSize / 2;
+    const y = gridSize / 2;
+    const pixelX = x * cellSize + cellSize / 2;
+    const pixelY = y * cellSize + cellSize / 2;
+    
+    const text = `${getTranslation("level_up")} ${currentLevel}!`;
+    
+    activeMessages.push({
+        text: text,
+        color: '#FFD700',
+        x: pixelX,
+        y: pixelY,
+        startTime: performance.now(),
+        duration: MESSAGE_DURATION
+    });
 
-    const message = document.createElement('div');
-    message.className = 'combo-message';
-    message.textContent = `${getTranslation("level_up")} ${currentLevel}!`;
-    message.style.left = `${x}px`;
-    message.style.top = `${y}px`;
-    message.style.color = '#FFD700';
-    message.style.textShadow = '0 0 10px #FFD700, 0 0 20px #FFD700';
-
-    document.getElementById('game-container').appendChild(message);
-
-    const levelContainer = document.getElementById('level-container');
-    levelContainer.classList.add('level-up-animation');
-
-    playSound("levelUp");
-
-    setTimeout(() => {
-        message.remove();
-        levelContainer.classList.remove('level-up-animation');
-    }, 1500);
 }
 
 // Обновить отображение уровня
@@ -517,4 +498,34 @@ function updateCachedGrid() {
 // Геттер для удобства
 function getCachedGrid() {
     return { gridSize: cachedGridSize, cellSize: cachedCellSize };
+}
+
+function drawMessages() {
+    const now = performance.now();
+    // Удаляем устаревшие сообщения
+    activeMessages = activeMessages.filter(msg => now - msg.startTime < msg.duration);
+    
+    for (const msg of activeMessages) {
+        const elapsed = now - msg.startTime;
+        const progress = Math.min(elapsed / msg.duration, 1); // 0..1
+        
+        const rise = MESSAGE_RISE * progress;
+        const scale = 1 + (MESSAGE_SCALE - 1) * progress;
+        const opacity = 1 - progress;
+        
+        const yPos = msg.y - rise;
+        
+        ctx.save();
+        ctx.translate(msg.x, yPos);
+        ctx.scale(scale, scale);
+        ctx.font = 'bold 24px "Arial Black", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = msg.color;
+        ctx.shadowBlur = 15 * (1 + progress); // увеличиваем тень к концу
+        ctx.fillStyle = msg.color;
+        ctx.globalAlpha = opacity;
+        ctx.fillText(msg.text, 0, 0);
+        ctx.restore();
+    }
 }
