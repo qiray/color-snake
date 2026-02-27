@@ -178,7 +178,7 @@ function handleFoodEaten(food) {
         score += comboBonus;
 
         // Показ сообщения о комбо
-        showComboMessage(food.x, food.y, comboBonus, food.color);
+        // showComboMessage(food.x, food.y, comboBonus, food.color);
 
         playSound("combo")
     } else {
