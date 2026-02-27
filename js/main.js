@@ -178,7 +178,7 @@ function handleFoodEaten(food) {
         score += comboBonus;
 
         // Показ сообщения о комбо
-        // showComboMessage(food.x, food.y, comboBonus, food.color);
+        showComboMessage(food.x, food.y, comboBonus, food.color);
 
         playSound("combo")
     } else {
@@ -318,26 +318,37 @@ function drawGrid(gridSize, cellSize) {
     ctx.stroke();
 }
 
-// Показать сообщение о комбо
 function showComboMessage(x, y, bonus, color) {
+    const messageElement = document.getElementById('combo-message');
+    if (!messageElement) return;
+
+    // Сброс анимации
+    messageElement.classList.add('hidden');
+    void messageElement.offsetWidth; // форсируем reflow
+
+    // Устанавливаем текст и цвет
+    messageElement.textContent = `+${bonus} ${getTranslation("combo_message")} x${combo}!`;
+    messageElement.style.color = color;
+    messageElement.style.textShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
+
+    // Получаем размер клетки
     const { cellSize } = getCachedGrid();
-    const message = document.getElementById('combo-message');
-    if (!message)
-        return;
-    // Останавливаем текущую анимацию и скрываем элемент
-    message.classList.add('hidden');
 
-    message.className = 'combo-message';
-    message.textContent = `+${bonus} ${getTranslation("combo_message")} x${combo}!`;
-    message.style.left = `${x * cellSize}px`;
-    message.style.top = `${canvas.offsetTop + y * cellSize}px`;
-    message.style.color = color;
-    message.style.textShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
+    // Координаты центра клетки (в пикселях) относительно контейнера
+    const posX = x * cellSize + cellSize / 2;
+    const posY = canvas.offsetTop + y * cellSize + cellSize / 2;
 
-    message.classList.remove('hidden');
+    // Устанавливаем left и top
+    messageElement.style.left = posX + 'px';
+    messageElement.style.top = posY + 'px';
+    messageElement.style.transform = ''; // убираем лишний transform
 
+    // Показываем
+    messageElement.classList.remove('hidden');
+
+    // Скрываем через 1.5 секунды
     setTimeout(() => {
-        message.classList.add('hidden');
+        messageElement.classList.add('hidden');
     }, 1500);
 }
 

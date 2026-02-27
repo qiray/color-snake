@@ -265,24 +265,34 @@ button:hover, .menu-button:hover {
 /* Адаптивные комбо-сообщения */
 .combo-message {
     position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%); /* центрирование относительно заданной точки */
     font-size: clamp(18px, 4vw, 28px);
     font-weight: bold;
     z-index: 5;
     pointer-events: none;
-    animation: floatUp 1.5s forwards, pulse 0.5s infinite alternate;
     text-align: center;
     font-family: 'Arial Black', sans-serif;
     white-space: nowrap;
+    will-change: transform, opacity, text-shadow; /* оптимизация для анимации */
+    opacity: 0; /* скрыто по умолчанию */
+    animation: none; /* отключаем анимацию до показа */
+    transition: none;
+}
+
+.combo-message:not(.hidden) {
+    opacity: 1;
+    animation: floatUp 1.5s forwards, pulse 0.5s infinite alternate;
 }
 
 .combo-message.hidden {
-    display: none;
+    display: none; /* полностью скрываем, чтобы не занимать место */
 }
 
-/* Анимации остаются без изменений */
 @keyframes floatUp {
-    0% { transform: translateY(-10px) scale(1); opacity: 1; }
-    100% { transform: translateY(-100px) scale(1.3); opacity: 0; }
+    0% { transform: translate(-50%, -50%) scale(1); }
+    100% { transform: translate(-50%, calc(-50% - 100px)) scale(1.3); }
 }
 
 @keyframes pulse {
