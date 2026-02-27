@@ -12,10 +12,10 @@
 function calculateGridSize() {
     const canvas = document.getElementById('gameCanvas');
     const container = document.getElementById('game-container');
-    
+
     // Определяем размер клетки в зависимости от размера canvas
     const canvasSize = Math.min(canvas.width, canvas.height);
-    
+
     // Динамический размер сетки в зависимости от размера экрана
     if (canvasSize <= 400) {
         gridSize = 15; // Для маленьких экранов
@@ -24,10 +24,10 @@ function calculateGridSize() {
     } else {
         gridSize = 25; // Для больших экранов
     }
-    
+
     // Рассчитываем размер клетки
     cellSize = canvasSize / gridSize;
-    
+
     return { gridSize, cellSize };
 }
 
@@ -61,7 +61,7 @@ function initGame() {
 // Генерация еды
 function addNewFood(count) {
     const { gridSize } = calculateGridSize();
-    
+
     for (let i = 0; i < count; i++) {
         let newFood;
         let overlapping;
@@ -117,7 +117,7 @@ function gameLoop() {
 function moveSnake() {
     direction = nextDirection;
     const { gridSize, cellSize } = calculateGridSize();
-    
+
     // Копируем голову
     const head = { ...snake[0] };
 
@@ -168,10 +168,10 @@ function handleFoodEaten(food) {
         score += comboBonus;
 
         // Показ сообщения о комбо
-        showComboMessage(food.x * config.gridSize, food.y * config.gridSize, comboBonus, food.color);
+        showComboMessage(food.x, food.y, comboBonus, food.color);
 
         playSound("combo")
-    } else {combo
+    } else {
         combo = 1;
         score += 10;
         playSound("eat")
@@ -201,18 +201,18 @@ function checkCollisions() {
 function drawGame() {
     // Очистка холста
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     // Рассчитываем размеры
     const { gridSize, cellSize } = calculateGridSize();
-    
+
     // Отрисовка сетки
     drawGrid(gridSize, cellSize);
-    
+
     // Отрисовка змейки с новыми размерами
     for (let i = 0; i < snake.length; i++) {
         const color = i === 0 ? '#FFFFFF' : currentColor;
         const radius = cellSize / 2 - 1;
-        
+
         ctx.fillStyle = color;
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
@@ -252,11 +252,11 @@ function drawGame() {
             ctx.fill();
         }
     }
-    
+
     // Отрисовка еды с новыми размерами
     for (const food of foods) {
         const radius = cellSize / 2 - 2;
-        
+
         ctx.fillStyle = food.color;
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 1;
@@ -290,7 +290,7 @@ function drawGame() {
 function drawGrid(gridSize, cellSize) {
     ctx.strokeStyle = 'rgba(0, 100, 200, 0.2)';
     ctx.lineWidth = 0.5;
-    
+
     // Вертикальные линии одним путем
     ctx.beginPath();
     for (let x = 0; x <= canvas.width; x += cellSize) {
@@ -311,18 +311,23 @@ function drawGrid(gridSize, cellSize) {
 // Показать сообщение о комбо
 function showComboMessage(x, y, bonus, color) {
     const { cellSize } = calculateGridSize();
-    const message = document.createElement('div');
+    const message = document.getElementById('combo-message');
+    if (!message)
+        return;
+    // Останавливаем текущую анимацию и скрываем элемент
+    message.classList.add('hidden');
+
     message.className = 'combo-message';
     message.textContent = `+${bonus} ${getTranslation("combo_message")} x${combo}!`;
     message.style.left = `${x * cellSize}px`;
-    message.style.top = `${y * cellSize}px`;
+    message.style.top = `${canvas.offsetTop + y * cellSize}px`;
     message.style.color = color;
     message.style.textShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
 
-    document.getElementById('game-container').appendChild(message);
+    message.classList.remove('hidden');
 
     setTimeout(() => {
-        message.remove();
+        message.classList.add('hidden');
     }, 1500);
 }
 
@@ -412,7 +417,7 @@ function showLevelUpMessage() {
     const { cellSize } = calculateGridSize();
     const x = head.x * cellSize;
     const y = head.y * cellSize;
-    
+
     const message = document.createElement('div');
     message.className = 'combo-message';
     message.textContent = `${getTranslation("level_up")} ${currentLevel}!`;
@@ -420,14 +425,14 @@ function showLevelUpMessage() {
     message.style.top = `${y}px`;
     message.style.color = '#FFD700';
     message.style.textShadow = '0 0 10px #FFD700, 0 0 20px #FFD700';
-    
+
     document.getElementById('game-container').appendChild(message);
-    
+
     const levelContainer = document.getElementById('level-container');
     levelContainer.classList.add('level-up-animation');
-    
+
     playSound("levelUp");
-    
+
     setTimeout(() => {
         message.remove();
         levelContainer.classList.remove('level-up-animation');
