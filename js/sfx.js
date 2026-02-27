@@ -85,6 +85,7 @@ else {
     }
 
     function playSound(key) {
+        return
         if (!audioContext) {
             initAudioContext();
             if (!audioContext) return;
