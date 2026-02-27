@@ -77,6 +77,8 @@ const comboBonuses = [
 ];
 
 let gamePaused = false;
+let cachedGridSize = 20;    // значение по умолчанию
+let cachedCellSize = 20;    // будет пересчитано при первом запуске
 
 // Конфигурация уровней
 const levelConfig = {

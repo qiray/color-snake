@@ -60,7 +60,7 @@ function initGame() {
 
 // Генерация еды
 function addNewFood(count) {
-    const { gridSize } = calculateGridSize();
+    const { gridSize } = getCachedGrid();
 
     for (let i = 0; i < count; i++) {
         let newFood;
@@ -116,7 +116,7 @@ function gameLoop() {
 // Движение змейки
 function moveSnake() {
     direction = nextDirection;
-    const { gridSize, cellSize } = calculateGridSize();
+    const { gridSize, cellSize } = getCachedGrid();
 
     // Копируем голову
     const head = { ...snake[0] };
@@ -203,7 +203,7 @@ function drawGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Рассчитываем размеры
-    const { gridSize, cellSize } = calculateGridSize();
+    const { gridSize, cellSize } = getCachedGrid();
 
     // Отрисовка сетки
     drawGrid(gridSize, cellSize);
@@ -310,7 +310,7 @@ function drawGrid(gridSize, cellSize) {
 
 // Показать сообщение о комбо
 function showComboMessage(x, y, bonus, color) {
-    const { cellSize } = calculateGridSize();
+    const { cellSize } = getCachedGrid();
     const message = document.getElementById('combo-message');
     if (!message)
         return;
@@ -414,7 +414,7 @@ function levelUp() {
 // Показать сообщение о новом уровне
 function showLevelUpMessage() {
     const head = snake[0];
-    const { cellSize } = calculateGridSize();
+    const { cellSize } = getCachedGrid();
     const x = head.x * cellSize;
     const y = head.y * cellSize;
 
@@ -466,4 +466,27 @@ function initLevel() {
     addNewFood(config.foodCount);
 
     combo = 0;
+}
+
+function updateCachedGrid() {
+    const canvas = document.getElementById('gameCanvas');
+    const container = document.getElementById('game-container');
+    
+    // Размер canvas уже должен быть установлен (например, в resize)
+    const canvasSize = Math.min(canvas.width, canvas.height);
+    
+    if (canvasSize <= 400) {
+        cachedGridSize = 15;
+    } else if (canvasSize <= 500) {
+        cachedGridSize = 20;
+    } else {
+        cachedGridSize = 25;
+    }
+    
+    cachedCellSize = canvasSize / cachedGridSize;
+}
+
+// Геттер для удобства
+function getCachedGrid() {
+    return { gridSize: cachedGridSize, cellSize: cachedCellSize };
 }

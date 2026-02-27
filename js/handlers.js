@@ -102,23 +102,19 @@ function handleResize() {
     const canvas = document.getElementById('gameCanvas');
     const container = document.getElementById('game-container');
     
-    // Сохраняем текущее состояние игры
-    const wasActive = gameActive;
-    const oldInterval = gameInterval;
+    // Устанавливаем квадратный canvas
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientWidth;
     
-    if (wasActive) {
-        clearInterval(oldInterval);
-        gameActive = false;
+    // Обновляем кеш размеров сетки
+    if (typeof updateCachedGrid === 'function') {
+        updateCachedGrid();
     }
     
-    // Принудительная перерисовка
-    setTimeout(() => {
-        if (wasActive) {
-            gameActive = true;
-            gameInterval = setInterval(gameLoop, gameSpeed);
-        }
+    // Если игра активна – перерисовываем
+    if (gameActive && typeof drawGame === 'function') {
         drawGame();
-    }, 100);
+    }
 }
 
 // ===== Обработчики мобильных кнопок =====
