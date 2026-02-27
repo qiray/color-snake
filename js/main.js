@@ -9,51 +9,32 @@
  * MIT Licensed
  */
 
-function calculateGridSize() {
-    const canvas = document.getElementById('gameCanvas');
-    const container = document.getElementById('game-container');
-
-    // Определяем размер клетки в зависимости от размера canvas
-    const canvasSize = Math.min(canvas.width, canvas.height);
-
-    // Динамический размер сетки в зависимости от размера экрана
-    if (canvasSize <= 400) {
-        gridSize = 15; // Для маленьких экранов
-    } else if (canvasSize <= 500) {
-        gridSize = 20; // Для средних экранов
-    } else {
-        gridSize = 25; // Для больших экранов
-    }
-
-    // Рассчитываем размер клетки
-    cellSize = canvasSize / gridSize;
-
-    return { gridSize, cellSize };
-}
-
-// Инициализация игры
 function initGame() {
-    segmentThreshold = levelConfig.segmentThreshold
-    currentLevel = 1
-    // Инициализация уровня
+    updateCachedGrid()
+    segmentThreshold = levelConfig.segmentThreshold;
+    currentLevel = 1;
     initLevel();
 
-    // Сброс очков
     score = 0;
     combo = 0;
     gameSpeed = config.baseSpeed;
+    timeStep = gameSpeed;          // синхронизируем шаг с текущей скоростью
     currentColor = '#00FF7F';
     loadRecords();
     updateScore();
 
-    // Начинаем игровой цикл
-    if (gameInterval) clearInterval(gameInterval);
-    gameInterval = setInterval(gameLoop, gameSpeed);
+    // Останавливаем предыдущий цикл, если был
+    if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+    }
     gameActive = true;
+    lastTimestamp = 0;
+    accumulator = 0;
+    rafId = requestAnimationFrame(gameLoopRAF);
 
     updateComboElementStyle("#ffcc00", '0 0 8px rgba(255, 204, 0, 0.8)');
 
-    // Скрываем кнопку продолжения, показываем стартовую
     document.getElementById('resume-button').style.display = 'none';
     document.getElementById('start-button').style.display = 'inline-block';
 }
@@ -107,10 +88,39 @@ function addNewFood(count) {
 }
 
 // Игровой цикл
-function gameLoop() {
-    moveSnake();
-    checkCollisions();
+function gameLoopRAF(timestamp) {
+    if (!gameActive) {
+        // Если игра не активна, не продолжаем цикл
+        rafId = null;
+        return;
+    }
+
+    if (!lastTimestamp) {
+        lastTimestamp = timestamp;
+        rafId = requestAnimationFrame(gameLoopRAF);
+        return;
+    }
+
+    let delta = timestamp - lastTimestamp;
+    lastTimestamp = timestamp;
+
+    // Ограничиваем дельту, чтобы избежать слишком большого шага при долгой паузе
+    if (delta > 200) delta = timeStep; // если вкладка была неактивна, пропускаем рывок
+
+    accumulator += delta;
+
+    // Фиксированный шаг: пока накоплено достаточно времени, двигаем змейку
+    while (accumulator >= timeStep) {
+        moveSnake();
+        checkCollisions();
+        accumulator -= timeStep;
+    }
+
+    // Отрисовываем всегда (можно оптимизировать, но для простоты оставим)
     drawGame();
+
+    // Запрашиваем следующий кадр
+    rafId = requestAnimationFrame(gameLoopRAF);
 }
 
 // Движение змейки
@@ -333,8 +343,11 @@ function showComboMessage(x, y, bonus, color) {
 
 // Конец игры
 function endGame() {
-    playSound("gameOver")
-    clearInterval(gameInterval);
+    playSound("gameOver");
+    if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+    }
     gameActive = false;
 
     finalScoreElement.textContent = score;
@@ -362,7 +375,10 @@ function showPopupMessage(title, message) {
 // Новая функция паузы
 function pauseGame() {
     if (gameActive) {
-        clearInterval(gameInterval);
+        if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = null;
+        }
         gameActive = false;
         gameOverlay.classList.remove('hidden');
         startScreen.classList.remove('hidden');
@@ -375,19 +391,20 @@ function resumeGame() {
     if (!gameActive) {
         gameOverlay.classList.add('hidden');
         startScreen.classList.add('hidden');
-        gameInterval = setInterval(gameLoop, gameSpeed);
         gameActive = true;
+        lastTimestamp = 0;           // сброс времени
+        accumulator = 0;
+        rafId = requestAnimationFrame(gameLoopRAF);
         document.getElementById('resume-button').style.display = 'none';
         document.getElementById('start-button').style.display = 'inline-block';
     }
 }
 
 function increaseSpeed(increase) {
-    // Увеличиваем скорость
     if (gameSpeed > levelConfig.maxSpeed) {
         gameSpeed = Math.max(levelConfig.maxSpeed, gameSpeed - increase);
-        clearInterval(gameInterval);
-        gameInterval = setInterval(gameLoop, gameSpeed);
+        timeStep = gameSpeed;        // синхронизируем шаг с новой скоростью
+        // Интервал больше не нужен, RAF сам подстроится
     }
 }
 

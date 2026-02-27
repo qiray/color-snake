@@ -17,7 +17,11 @@ const config = {
     baseSpeed: 150
 };
 
-let gridSize;
+let rafId = null;                // идентификатор requestAnimationFrame
+let lastTimestamp = 0;           // время предыдущего кадра
+let accumulator = 0;             // накопитель времени
+let timeStep = config.baseSpeed; // фиксированный шаг (в мс), совпадает с gameSpeed
+
 let cellSize;
 
 // Игровые переменные
@@ -45,7 +49,6 @@ let score = 0;
 let combo = 0;
 let maxCombo = 0;
 let currentColor = '#00FF7F';
-let gameInterval;
 let gameActive = false;
 let gameSpeed = config.baseSpeed;
 
