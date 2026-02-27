@@ -373,6 +373,19 @@ button:hover, .menu-button:hover {
 @media screen and (orientation: portrait) and (max-width: 768px) {
     #game-container {
         max-height: 85vh;
+        top: -56px;
+    }
+
+    #score-container, #combo-container, 
+    #best-score-container, #best-combo-container {
+        width: 100%;
+        text-align: left;
+    }
+
+    #level-container {
+        position: absolute;
+        top: 74px;
+        right: 5px;
     }
 }
 
@@ -458,8 +471,8 @@ button:hover, .menu-button:hover {
     font-size: 8vw;
     font-weight: bold;
     cursor: pointer;
-    width: 22vw;
-    height: 15vw;
+    width: 21vw;
+    height: 14vw;
     display: flex;
     align-items: center;
     justify-content: center;
