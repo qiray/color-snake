@@ -468,7 +468,7 @@ button:hover, .menu-button:hover {
     border: none;
     border-radius: 50px;
     color: #1a1a2e;
-    font-size: 8vw;
+    font-size: 7vw;
     font-weight: bold;
     cursor: pointer;
     width: 21vw;
@@ -491,7 +491,7 @@ button:hover, .menu-button:hover {
 }
 
 .pause-btn {
-    font-size: 12vw;
+    font-size: 10vw;
 }
 
 /* Показываем кнопки только на мобильных устройствах */
